@@ -1,0 +1,485 @@
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  top: -20px;
+  margin-left: 80px;
+  padding: 1rem;
+  box-sizing: border-box;
+  margin-top: -35px;
+}
+
+.section1,
+.section2 {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-left: 100px;
+  align-items: stretch;
+}
+
+.section2 {
+  margin-bottom: 20px;
+}
+
+
+.course-progress,
+.weekly-study-time,
+.achievements,
+.milestones {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+}
+
+.course-progress {
+  width: 52%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.weekly-study-time {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  margin-left: 10px;
+  padding: 1rem;
+}
+
+.achievements,
+.milestones {
+  height: auto;
+  padding: 1rem;
+}
+
+.achievements {
+  width: 48%;
+}
+
+.milestones {
+  width: 45%;
+}
+
+/* ===== COURSE PROGRESS ===== */
+.cp h2,
+.wst h2 {
+  margin-bottom: 8px;
+  font-size: 2rem;
+  color: #1e40af;
+  font-weight: 700;
+  margin-left: 12px;
+}
+
+.cp-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.cp-chart-item {
+  width: 100%;
+  min-height: 30px;
+  background-color: #f9f9f9;
+  border-left: 6px solid #007bff;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); */
+  transition: transform 0.2s;
+}
+
+.cp-chart-item-bar,
+.course-progress-fill {
+  height: 20px;
+  background: linear-gradient(90deg, #1e40af 60%, #0f62fe 100%);
+  border-radius: 5px;
+  transition: width 0.4s;
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 0.3rem;
+}
+
+.bottom svg {
+  margin-right: 8px;
+}
+
+.cp-chart-item-percentage {
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: 600;
+  margin-left: 150px;
+}
+
+/* ===== ACHIEVEMENTS ===== */
+.achievements-card {
+  background-color: none;
+  padding: 1.2rem;
+  border-radius: 1rem;
+  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); */
+  width: 100%;
+}
+
+.achievements-title {
+  font-size: 1.5rem;
+  color: #1e40af;
+  font-weight: 600;
+  margin-left: 12px;
+  margin-bottom: 1rem;
+}
+
+.achievements-list {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.achievement-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 145px;
+  background: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  text-align: center;
+  color: #374151;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: background-color 0.3s;
+}
+
+.achievement-item:hover {
+  background-color: #f3f4f6;
+}
+
+.achievement-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #1e40af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+/* ===== MILESTONES ===== */
+.milestones-card {
+  background: none;
+  padding: 1.5rem;
+  border-radius: 1rem;
+}
+
+.milestones-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e40af;
+  margin-bottom: 1rem;
+}
+
+.milestone-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.milestone-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: #f9fafb;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  width: 140px;
+}
+
+.milestone-icon {
+  flex-shrink: 0;
+}
+
+.milestone-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.milestone-desc {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.milestone-date {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .side {
+    display: none !important;
+  }
+  .sections {
+    margin-top: 10px !important;
+    margin-left: -10px;
+  }
+  .section1,
+  .section2 {
+    flex-direction: column;
+    margin-left: 0;
+    align-items: center;
+  }
+
+  .course-progress,
+  .weekly-study-time,
+  .achievements,
+  .milestones {
+    width: 90% !important;
+    margin: 0 auto;
+  }
+
+  .study-chart-container {
+    width: 100% !important;
+    height: 100%;
+  }
+
+  .achievements-list {
+    justify-content: space-between;
+    max-width: 650px;
+    align-self: center;
+  }
+
+  .milestone-list {
+    display: flex;
+    flex-direction: row !important;
+    justify-content: space-between;
+    max-width: 650px;
+  }
+
+  .cp-chart-item-percentage {
+    margin-left: auto;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .side{
+    display: none !important;
+  }
+  .sections {
+    margin-top: 10px !important;
+  }
+  .cp h2,
+  .wst h2,
+  .achievements-title,
+  .milestones-title {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .cp-chart-item,
+  .achievements-card,
+  .milestones-card {
+    padding: 1rem;
+  }
+
+  .cp-chart-item-percentage {
+    font-size: 1rem;
+    text-align: right;
+    margin-left: 0;
+  }
+
+  .achievement-item,
+  .milestone-item {
+    width: 100%;
+  }
+
+  .cp-chart {
+    gap: 0.5rem;
+  }
+
+  .sections {
+    padding: 0.5rem;
+    margin-left: 0;
+  }
+
+  .weekly-study-time {
+    flex-direction: column;
+    align-items: center;
+    width: 100% !important;
+  }
+  .study-chart-container {
+    width: 100% !important;
+    height: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .side{
+    display: none !important;
+  }
+  .sections {
+    padding: 0.5rem;
+    margin-left: 0;
+    margin-top: 10px;
+  }
+
+  .section1,
+  .section2 {
+    flex-direction: column;
+    margin-left: 0;
+    align-items: center;
+    gap: 1rem;
+  }
+  .study-chart-container {
+    width: 100% !important;
+    height: 100%;
+  }
+
+  .course-progress,
+  .weekly-study-time,
+  .achievements,
+  .milestones {
+    width: 100% !important;
+    margin: 0 auto;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+
+  .achievements {
+    height: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .achievements-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .achievement-item {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .milestone-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .milestone-item {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .cp-chart-item,
+  .achievements-card,
+  .milestones-card {
+    padding: 0.75rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .cp h2,
+  .wst h2,
+  .achievements-title {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .cp-chart-item-percentage {
+    font-size: 1rem;
+    text-align: right;
+    margin-left: 0;
+  }
+}
+
+/* Ultra-small screens like Galaxy S8+ (360px) */
+@media (max-width: 360px) {
+  .side{
+    display: none !important;
+  }
+  body,
+  html {
+    width: 100%;
+    overflow-x: hidden;
+  }
+  .sections {
+    margin-top: 10px !important;
+  }
+  .navbar, /* or .navbar-container or whatever you're using */
+  .sections,
+  .section1,
+  .section2,
+  .course-progress,
+  .weekly-study-time,
+  .achievements,
+  .milestones,
+  .achievements-card,
+  .milestones-card,
+  .cp-chart-item,
+  .achievement-item,
+  .milestone-item {
+    width: 100% !important;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+  }
+
+  .section1,
+  .section2 {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0;
+    padding: 0 0.5rem;
+  }
+
+  .sections {
+    padding: 0.5rem;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .study-chart-container {
+    width: 105% !important;
+    height: 100%;
+  }
+
+  .cp h2,
+  .wst h2,
+  .achievements-title {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .achievements-list,
+  .milestone-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .achievement-item,
+  .milestone-item {
+    width: 100%;
+    max-width: 320px;
+    padding: 1rem;
+  }
+}
