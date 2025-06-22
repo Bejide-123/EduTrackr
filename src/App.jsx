@@ -7,6 +7,7 @@ import Course from "./pages/Course";
 import Schedule from "./pages/Schedule";
 import Progress from "./pages/Progress";
 import Resume from "./pages/ResumeCourse";
+import Change from "./pages/Change-Password";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Route path="/schedule" element ={<Schedule />} />
       <Route path="/progress" element ={<Progress />} />
       <Route path="/resume-course" element ={<Resume />} />
+      <Route path="/change-password" element ={<Change />} />
     </Routes>
   );
 }
