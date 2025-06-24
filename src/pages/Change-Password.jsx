@@ -1,19 +1,23 @@
 import React, { useState } from "react";
 import { FaLock } from "react-icons/fa";
-import "../css/Change.css"
+import "../css/Change.css";
 import Toast from "../Componenets/Toast";
+import { useNavigate } from "react-router-dom";
 
 const Change = () => {
-  const [toast, setToast] = useState({ show: false, message: '', type: '' });
+  const [toast, setToast] = useState({ show: false, message: "", type: "" });
   const [error, setError] = useState("");
+  const navigate = useNavigate()
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+  const currentUser = JSON.parse(localStorage.getItem("currentUser")); // Logged-in user
 
   const [form, setForm] = useState({
     password: "",
     password1: "",
-    password2: ""
+    password2: "",
   });
 
-  const showToast = (message, type = 'success') => {
+  const showToast = (message, type = "success") => {
     setToast({ show: true, message, type });
   };
 
@@ -31,20 +35,63 @@ const Change = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const userIndex = users.findIndex((u) => u.email === currentUser?.email);
+
+    if (userIndex === -1) {
+      setError("User not found.");
+      showToast("User not found.", "error");
+      return;
+    }
+
     if (form.password === "") {
       setError("Enter current password.");
       showToast("Enter current password.", "error");
-    } else if (form.password1 === "" || form.password2 === "") {
-      setError("Enter and confirm your new password.");
+      return;
+    }
+
+    if (users[userIndex].password !== form.password) {
+      setError("Current password is incorrect.");
+      showToast("Incorrect current password.", "error");
+      setForm({
+      password: ""
+    });
+      return;
+    }
+
+    if (form.password1 === "" || form.password2 === "") {
+      setError("New password fields cannot be empty.");
       showToast("New password fields cannot be empty.", "error");
-    } else if (form.password1 !== form.password2) {
+      return;
+    }
+
+    if (form.password1 !== form.password2) {
       setError("Passwords do not match.");
       showToast("Passwords do not match.", "error");
-    } else {
-      setError("");
-      showToast("Password changed successfully!", "success");
-      // Call your backend or local storage logic here
+      setForm({
+      password1: "",
+      password2: "",
+    });
+      return;
     }
+
+    // ✅ All checks passed: update password
+    users[userIndex].password = form.password1;
+    localStorage.setItem("users", JSON.stringify(users));
+
+    setError("");
+    showToast("Password changed successfully!", "success");
+    setTimeout(() => {
+      navigate("/welcome")
+    }, 1500);
+
+
+    // Optionally reset form fields
+    setForm({
+      password: "",
+      password1: "",
+      password2: "",
+    });
   };
 
   return (
@@ -67,7 +114,7 @@ const Change = () => {
                   id="password"
                   type="password"
                   name="password"
-                  placeholder="Password"
+                  placeholder="Current Password"
                   value={form.password}
                   onChange={handleChange}
                   autoComplete="current-password"
@@ -110,7 +157,9 @@ const Change = () => {
               </div>
             </div>
 
-            <button type="submit" className="submit-btn">Change Password</button>
+            <button type="submit" className="submit-btn">
+              Change Password
+            </button>
           </div>
         </form>
       </div>

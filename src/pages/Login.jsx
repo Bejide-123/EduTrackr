@@ -50,6 +50,7 @@ const Login = () => {
       setTimeout(() => {
         navigate("/welcome")
       }, 1000);
+      localStorage.setItem("currentUser", JSON.stringify(user));
     } else {
       setError("Invalid email or password.");
       setLoading(false);
