@@ -5,7 +5,7 @@ import '../css/Progress.css';
 import { FaBook } from 'react-icons/fa';
 import { FaStar } from "react-icons/fa";
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer
+      BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from 'recharts';
 import '../css/StudyChart.css';
 import { FaTrophy, FaMedal, FaCertificate } from 'react-icons/fa';
@@ -19,7 +19,7 @@ const Progress = () => {
       const [activeTab, setActiveTab] = useState('course');
 
       const data = [
-  { day: 'MON', hours: 2 },
+  { day: 'MON', hours: 7 },
   { day: 'TUE', hours: 9 },
   { day: 'WED', hours: 2 },
   { day: 'THU', hours: 4 },

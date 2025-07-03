@@ -179,7 +179,6 @@ const Course = () => {
     )}
   </div>
 )}
-
       </div>
 
     </>

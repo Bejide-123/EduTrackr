@@ -1,12 +1,11 @@
 import '../css/Assignment.css';
 import { useState, useEffect } from 'react';
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaBook } from 'react-icons/fa';
 
 const Assignment = ({ showToast }) => {
-  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
-  const userEmail = loginInfo?.email;
-  const [showForm, setShowForm] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
   const [assignments, setAssignments] = useState([]);
+  const [showForm, setShowForm] = useState(false);
   const [course, setCourse] = useState('');
   const [title, setTitle] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -14,13 +13,26 @@ const Assignment = ({ showToast }) => {
   const [editIndex, setEditIndex] = useState(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem('assignments');
-    if (stored) setAssignments(JSON.parse(stored));
+    const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+    if (loginInfo?.email) {
+      setUserEmail(loginInfo.email);
+    }
   }, []);
 
+  // ✅ Load assignments for that user
   useEffect(() => {
-    localStorage.setItem('assignments', JSON.stringify(assignments));
-  }, [assignments]);
+    if (userEmail) {
+      const stored = localStorage.getItem(`assignments_${userEmail}`);
+      if (stored) setAssignments(JSON.parse(stored));
+    }
+  }, [userEmail]);
+
+  // ✅ Save to localStorage on every change
+  useEffect(() => {
+    if (userEmail) {
+      localStorage.setItem(`assignments_${userEmail}`, JSON.stringify(assignments));
+    }
+  }, [assignments, userEmail]);
 
   const toggleForm = () => {
     setShowForm(prev => !prev);
@@ -43,7 +55,6 @@ const Assignment = ({ showToast }) => {
     } else {
       setAssignments(prev => [newAssignment, ...prev]);
       showToast('Assignment added successfully', 'success');
-      setAssignments(updated);
     }
 
     toggleForm();
@@ -77,52 +88,49 @@ const Assignment = ({ showToast }) => {
       </div>
 
       <div className="assignments">
-        
-
         {showForm && (
-  <div className="modal-overlay">
-    <div className="modal-content">
-      <h3>{editIndex !== null ? 'Edit Assignment' : 'Add Assignment'}</h3>
-      <form className="assignment-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Course name"
-          value={course}
-          onChange={(e) => setCourse(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Assignment Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <input
-          type="date"
-          placeholder="Due Date"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-          required
-        />
-        <textarea
-          placeholder="Description or Instructions"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        ></textarea>
-        <div className="form-buttons">
-          <button type="button"id='cancel' onClick={toggleForm}>Cancel</button>
-          <button type="submit">{editIndex !== null ? 'Update' : 'Add'} Assignment</button>
-        </div>
-      </form>
-    </div>
-  </div>
-)}
-
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3>{editIndex !== null ? 'Edit Assignment' : 'Add Assignment'}</h3>
+              <form className="assignment-form" onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  placeholder="Course name"
+                  value={course}
+                  onChange={(e) => setCourse(e.target.value)}
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Assignment Title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                />
+                <input
+                  type="date"
+                  placeholder="Due Date"
+                  value={dueDate}
+                  onChange={(e) => setDueDate(e.target.value)}
+                  required
+                />
+                <textarea
+                  placeholder="Description or Instructions"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                ></textarea>
+                <div className="form-buttons">
+                  <button type="button" id='cancel' onClick={toggleForm}>Cancel</button>
+                  <button type="submit">{editIndex !== null ? 'Update' : 'Add'} Assignment</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         {assignments.map((item, index) => (
           <div key={index} className="assignment-card">
-            <h2>{item.course}</h2>
+            <h2><FaBook />  {item.course}</h2>
             <h4>{item.title}</h4>
             <p>{item.description}</p>
             <div className="assignment-actions">
