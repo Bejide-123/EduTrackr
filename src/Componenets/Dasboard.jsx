@@ -26,6 +26,7 @@ const Dashboard = () => {
       if (loginInfo && loginInfo.email) {
         savedCourses =
           JSON.parse(localStorage.getItem(`courses_${loginInfo.email}`)) || [];
+          JSON.parse(localStorage.getItem(`assignments_${loginInfo.email}`)) || [];
       }
       setCourseCount(savedCourses.length);
     };

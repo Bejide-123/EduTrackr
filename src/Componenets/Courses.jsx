@@ -9,10 +9,8 @@ const Course = ({ showToast }) => {
   const navigate = useNavigate()
   const [durationWeeks, setDurationWeeks] = useState(0);
   const [weeklyTopics, setWeeklyTopics] = useState([]);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  
-  
+
 
   const [courses, setCourses] = useState(() => {
     if (!userEmail) return [];

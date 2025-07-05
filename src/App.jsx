@@ -8,6 +8,7 @@ import Schedule from "./pages/Schedule";
 import Progress from "./pages/Progress";
 import Resume from "./pages/ResumeCourse";
 import Change from "./pages/Change-Password";
+import ForgotPassword from "./pages/Forgot-password";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Route path="/progress" element ={<Progress />} />
       <Route path="/resume-course" element ={<Resume />} />
       <Route path="/change-password" element ={<Change />} />
+      <Route path="/forgot-password" element ={<ForgotPassword />} />
     </Routes>
   );
 }

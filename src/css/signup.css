@@ -16,7 +16,7 @@
       min-width: 340px;
       max-width: 410px;
       width: 100%;
-      gap: 1.0rem;
+      gap: 0.5rem;
 }
 
 .signup-form h2 {
@@ -40,7 +40,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0rem !important;
 }
 
 .input-group label {

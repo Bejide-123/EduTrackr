@@ -43,7 +43,7 @@ const Login = () => {
     );
 
     if (user) {
-      const { password, ...userInfo } = user;
+      const { ...userInfo } = user;
       localStorage.setItem('loginInfo', JSON.stringify(userInfo));
       setLoading(false);
       showToast("Login Successful", "success");

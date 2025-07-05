@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 const Change = () => {
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
-  const [error, setError] = useState("");
   const navigate = useNavigate()
   const users = JSON.parse(localStorage.getItem("users")) || [];
   const currentUser = JSON.parse(localStorage.getItem("currentUser")); // Logged-in user
@@ -39,19 +38,16 @@ const Change = () => {
     const userIndex = users.findIndex((u) => u.email === currentUser?.email);
 
     if (userIndex === -1) {
-      setError("User not found.");
       showToast("User not found.", "error");
       return;
     }
 
     if (form.password === "") {
-      setError("Enter current password.");
       showToast("Enter current password.", "error");
       return;
     }
 
     if (users[userIndex].password !== form.password) {
-      setError("Current password is incorrect.");
       showToast("Incorrect current password.", "error");
       setForm({
       password: ""
@@ -60,13 +56,11 @@ const Change = () => {
     }
 
     if (form.password1 === "" || form.password2 === "") {
-      setError("New password fields cannot be empty.");
       showToast("New password fields cannot be empty.", "error");
       return;
     }
 
     if (form.password1 !== form.password2) {
-      setError("Passwords do not match.");
       showToast("Passwords do not match.", "error");
       setForm({
       password1: "",
@@ -79,7 +73,6 @@ const Change = () => {
     users[userIndex].password = form.password1;
     localStorage.setItem("users", JSON.stringify(users));
 
-    setError("");
     showToast("Password changed successfully!", "success");
     setTimeout(() => {
       navigate("/welcome")

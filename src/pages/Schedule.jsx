@@ -422,6 +422,7 @@ const Schedule = () => {
             ].map((day) => (
               <div key={day} className="day-block">
                 <div className="day-title">{day}</div>
+                <hr />
                 <div className="day-schedule-items">
                   {groupedSchedules[day]?.length > 0 ? (
                     groupedSchedules[day].map((schedule, idx) => (

@@ -296,6 +296,7 @@ select {
   width: 100%;
   cursor: pointer;
   font-size: 0.9rem;
+  margin-top: 10px;
 }
 
 .schedule-details {
