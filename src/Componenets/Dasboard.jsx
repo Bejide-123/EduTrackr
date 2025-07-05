@@ -9,6 +9,7 @@ const Dashboard = () => {
   const [date, setDate] = useState(new Date());
   const [courseCount, setCourseCount] = useState(0);
   const [userFirstName, setUserFirstName] = useState("");
+  const [assignmentCount, setAssignmentCount] = useState(0);
 
   const isToday = (dateObj) => {
     const today = new Date();
@@ -22,13 +23,16 @@ const Dashboard = () => {
   useEffect(() => {
     const updateCount = () => {
       const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+      let savedAssignments = [];
       let savedCourses = [];
       if (loginInfo && loginInfo.email) {
         savedCourses =
           JSON.parse(localStorage.getItem(`courses_${loginInfo.email}`)) || [];
+        savedAssignments =
           JSON.parse(localStorage.getItem(`assignments_${loginInfo.email}`)) || [];
       }
       setCourseCount(savedCourses.length);
+      setAssignmentCount(savedAssignments.length);
     };
 
     const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
@@ -73,7 +77,7 @@ const Dashboard = () => {
               <FaClipboardList />
             </div>
             <div>
-              <p className="number">5</p>
+              <p className="number">{assignmentCount}</p>
               <p className="text">Assignments</p>
             </div>
           </div>
