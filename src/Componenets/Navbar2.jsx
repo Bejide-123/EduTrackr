@@ -40,8 +40,8 @@ const Navbar = () => {
           {dropdownOpen && (
             <ul className="dropdown-menu">
               <li>
-                <button onClick={() => { setDropdownOpen(false); navigate("/settings"); }}>
-                  Settings
+                <button onClick={() => { setDropdownOpen(false); navigate("/profile"); }}>
+                  Profile
                 </button>
               </li>
               <li>
@@ -50,8 +50,8 @@ const Navbar = () => {
                 </button>
               </li>
               <li>
-                <button onClick={() => { setDropdownOpen(false); alert("Theme switch coming soon!"); }}>
-                  Theme
+                <button onClick={() => { setDropdownOpen(false); navigate("/settings"); }}>
+                  Settings
                 </button>
               </li>
               <li>
