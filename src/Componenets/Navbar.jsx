@@ -11,7 +11,7 @@ const Navbar = () => {
       <div className="logo"><span className="logo-e">E</span>duTrackr</div>
       <ul className="nav-links">
         <li><Link to ="/">Home</Link></li>
-        <li><a href="#features">Features</a></li>
+        <li><a href="#features" onClick={e => { e.preventDefault(); document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' }); }}>Features</a></li>
         <li><Link to="/login" id="login-btn">Login</Link></li> 
       </ul>
       
@@ -36,8 +36,8 @@ const Navbar = () => {
           <FaTimes size={24} />
         </button>
         <ul>
-          <li><a href="#home" onClick={() => setSidebarOpen(false)}>Home</a></li>
-          <li><a href="#features" onClick={() => setSidebarOpen(false)}>Features</a></li>
+          <li><Link to="/" onClick={() => setSidebarOpen(false)}>Home</Link></li>
+          <li><a href="#features" onClick={e => { e.preventDefault(); setSidebarOpen(false); setTimeout(() => { document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }}>Features</a></li>
           <li><Link to="/login">Login</Link></li>
         </ul>
       </aside>

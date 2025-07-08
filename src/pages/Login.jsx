@@ -59,7 +59,7 @@ const Login = () => {
   };
 
   const handleGoogleSignIn = () => {
-    alert("Google sign-in coming soon!");
+    alert("Google sign-in coming soon!, Please create an account using email and password.");
   };
 
   return (
