@@ -50,7 +50,7 @@ const Navbar = () => {
                 </button>
               </li>
               <li>
-                <button onClick={() => { setDropdownOpen(false); navigate("/settings"); }}>
+                <button onClick={() => { setDropdownOpen(false); alert("In development") }}> 
                   Settings
                 </button>
               </li>

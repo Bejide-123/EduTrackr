@@ -186,7 +186,7 @@ const Course = ({ showToast }) => {
                 <span className="course-progress-label"> {getProgress(course)}% Completed</span>
               </div>
               <div className="card-buttons">
-                <button className="resume-btn" id='rsm' onClick={() => navigate('/resume-course')}>
+                <button className="resume-btn" id='rsm' onClick={() => alert("Resume Course In production")}>
                   Resume Course
                 </button>
                 <button onClick={() => handleEdit(index)}><FaEdit /></button>

@@ -112,7 +112,7 @@ const Course = () => {
                   </div>
                   <p id="measure">{course.progress}% completed</p>
                   <div className="btns">
-                    <button id="resume-btn" className="resume-btn" onClick={() => navigate("/resume-course")}>Resume Course</button>
+                    <button id="resume-btn" className="resume-btn" onClick={() => alert("Resume Course In production")}>Resume Course</button>
                     <button className="resume-btn" onClick={() => openDetails(course)}>View Details</button>
                   </div>
                 </div>
