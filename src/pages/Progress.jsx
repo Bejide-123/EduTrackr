@@ -18,15 +18,23 @@ import { FaCalendarCheck } from 'react-icons/fa';
 const Progress = () => {
       const [activeTab, setActiveTab] = useState('course');
 
+      // Load courses from localStorage for the current user
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      const courses = currentUser && currentUser.email
+        ? JSON.parse(localStorage.getItem(`courses_${currentUser.email}`)) || []
+        : [];
+
+      // Example: Weekly study data could be calculated from course progress or assignments if available
+      // For now, keep the static data for the chart
       const data = [
-  { day: 'MON', hours: 7 },
-  { day: 'TUE', hours: 9 },
-  { day: 'WED', hours: 2 },
-  { day: 'THU', hours: 4 },
-  { day: 'FRI', hours: 6 },
-  { day: 'SAT', hours: 3 },
-  { day: 'SUN', hours: 3 },
-];
+        { day: 'MON', hours: 7 },
+        { day: 'TUE', hours: 9 },
+        { day: 'WED', hours: 2 },
+        { day: 'THU', hours: 4 },
+        { day: 'FRI', hours: 6 },
+        { day: 'SAT', hours: 3 },
+        { day: 'SUN', hours: 3 },
+      ];
       return (
             <>
                   <Navbar />
@@ -41,42 +49,34 @@ const Progress = () => {
                                     <div className="cp">
                                           <h2> <FaChartLine color='#1e40af' style={{marginLeft: '10px'}}/> Course Progress</h2>
                                           <div className="cp-chart">
-                                                <div className="cp-chart-item">
-                                                      <div className="cp-chart-item-label">
-                                                            <h3><FaBook color='#1e40af' style={{ marginRight: '8px' }} /> Introduction to Linear Algebra</h3>
+                                            {courses.length === 0 ? (
+                                              <div style={{ color: '#888', padding: '1rem' }}>No courses found.</div>
+                                            ) : (
+                                              courses.map((course, idx) => {
+                                                // Ensure progress is a number between 0 and 100
+                                                let progress = 0;
+                                                if (typeof course.progress === 'number') {
+                                                  progress = Math.max(0, Math.min(100, course.progress));
+                                                } else if (typeof course.progress === 'string' && course.progress.trim() !== '') {
+                                                  const parsed = parseInt(course.progress, 10);
+                                                  progress = isNaN(parsed) ? 0 : Math.max(0, Math.min(100, parsed));
+                                                }
+                                                return (
+                                                  <div className="cp-chart-item" key={course.id || idx}>
+                                                    <div className="cp-chart-item-label">
+                                                      <h3><FaBook color="#1e40af" style={{ marginRight: '8px' }} /> {course.title || course.name}</h3>
+                                                    </div>
+                                                    <div className="bottom">
+                                                      <FaStar color="#f59e0b" size={28} style={{ marginRight: '10px', backgroundColor: '#f9f9f9' }} />
+                                                      <div className="course-progress-bar">
+                                                        <div className="course-progress-fill" style={{ width: `${progress}%` }}></div>
                                                       </div>
-                                                      <div className="bottom">
-                                                            <FaStar color="#f59e0b" size={28} style={{ marginRight: '10px', backgroundColor: '#f9f9f9' }} />
-                                                            <div className="course-progress-bar">
-                                                                  <div className="course-progress-fill" style={{ width: '70%' }}></div>
-                                                            </div>
-                                                      <div className="cp-chart-item-percentage">70%</div>
-                                                      </div>
-                                                </div>
-                                                <div className="cp-chart-item">
-                                                      <div className="cp-chart-item-label">
-                                                            <h3><FaBook color='#1e40af' style={{ marginRight: '8px' }} /> Mathematical Methods 2</h3>
-                                                      </div>
-                                                      <div className="bottom">
-                                                            <FaStar color="#f59e0b" size={28} style={{ marginRight: '10px' }} />
-                                                            <div className="course-progress-bar">
-                                                                  <div className="course-progress-fill" style={{ width: '50%' }}></div>
-                                                            </div>
-                                                            <div className="cp-chart-item-percentage">50%</div>
-                                                      </div>
-                                                </div>
-                                                <div className="cp-chart-item">
-                                                      <div className="cp-chart-item-label">
-                                                            <h3><FaBook color='#1e40af' style={{ marginRight: '8px' }} /> Computational Methods and Algorithms</h3>
-                                                      </div>
-                                                      <div className="bottom">
-                                                            <FaStar color="#f59e0b" size={28} style={{ marginRight: '10px' }} />
-                                                            <div className="course-progress-bar">
-                                                                  <div className="course-progress-fill" style={{ width: '90%' }}></div>
-                                                            </div>
-                                                            <div className="cp-chart-item-percentage">90%</div>
-                                                      </div>
-                                                </div>
+                                                      <div className="cp-chart-item-percentage">{progress}%</div>
+                                                    </div>
+                                                  </div>
+                                                );
+                                              })
+                                            )}
                                           </div>
                                     </div>
                               </section>
