@@ -19,7 +19,7 @@
   background-color: #f4f4f4;
   padding: 1.2rem;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .section-header {
@@ -42,7 +42,8 @@
   align-items: center;
   gap: 0.4rem;
 }
-.view-btn{
+
+.view-btn {
   background-color: #b5b5b5d7 !important;
   color: black !important;
 }
@@ -56,7 +57,7 @@
   background-color: #f9f9f9;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .empty-week {
@@ -76,11 +77,12 @@
   z-index: 999;
   width: 90%;
   max-width: 500px;
-  max-height: 100vh; 
-  overflow-y: hidden;  
-  padding: 1.5rem;
+  max-height: 80vh;         /* <== limits height */
+  overflow-y: auto;         
+  padding: 1.2rem;
   border-radius: 10px;
 }
+
 
 .timer {
   background-color: #f4f7fe;
@@ -93,7 +95,8 @@
 
 .timer .section-header {
   margin-bottom: 10px;
-  align-self: flex-start; /* Keep header left-aligned */
+  align-self: flex-start;
+  /* Keep header left-aligned */
 }
 
 .countdown-timer {
@@ -174,9 +177,11 @@
   font-size: 1rem;
   padding-left: 0.2rem;
 }
+
 select {
   padding-right: 1.2rem !important;
 }
+
 .course-form input,
 .course-form select {
   width: 100%;
@@ -207,8 +212,9 @@ select {
   cursor: pointer;
   margin-top: 0.5rem;
   transition: background 0.2s, color 0.2s, transform 0.15s;
-  box-shadow: 0 2px 8px rgba(30,64,175,0.08);
+  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.08);
 }
+
 .cancel {
   background-color: #f4f4f4 !important;
   border: 1px solid #ccc !important;
@@ -231,7 +237,7 @@ select {
   display: flex;
   gap: 1rem;
   width: 100%;
-  
+
 }
 
 .part .form-group {
@@ -261,7 +267,8 @@ select {
   background-color: #f4f4f4;
   font-size: 1rem;
 }
-.btnns{
+
+.btnns {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
@@ -410,6 +417,7 @@ select {
     transform: translate(-50%, -40%);
     opacity: 0;
   }
+
   to {
     transform: translate(-50%, -50%);
     opacity: 1;
@@ -455,6 +463,16 @@ select {
     gap: 15px;
   }
 
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .form-group input {
+    margin-bottom: 10px !important;
+  }
+
   .day-block {
     flex: 1 1 100%;
   }
@@ -465,8 +483,47 @@ select {
   .top-section {
     flex-direction: column;
   }
-
+  
   .part {
     flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .course-form {
+    width: 95%;
+    max-width: 350px;
+    padding: 0.8rem;
+  }
+}
+@media screen and (max-width: 600px) {
+  .weekly-table {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .day-block {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .schedule-details-modal {
+    width: 90%;
+    max-width: none;
+    padding: 1rem;
+  }
+}
+@media screen and (max-width: 400px) {
+  .weekly-table {
+    grid-template-columns: 1fr;
+  }
+
+  .day-block {
+    width: 100%;
+  }
+
+  .course-form {
+    width: 90%;
+    max-width: none;
+    padding: 0.5rem;
   }
 }
