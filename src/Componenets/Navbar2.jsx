@@ -41,7 +41,7 @@ const Navbar = () => {
             <ul className="dropdown-menu">
               <li>
                 <button onClick={() => { setDropdownOpen(false); navigate("/profile"); }}>
-                  Profile
+                  My Profile
                 </button>
               </li>
               <li>

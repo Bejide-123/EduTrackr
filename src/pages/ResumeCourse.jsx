@@ -5,6 +5,9 @@ const Resume = () => {
       return(
             <>
                   <Navbar />
+                  <div className="resume-page-container"> 
+            
+                  </div>
             </>
       )
 }
