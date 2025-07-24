@@ -112,8 +112,8 @@ const Course = () => {
                   </div>
                   <p id="measure">{course.progress}% completed</p>
                   <div className="btns">
-                    <button id="resume-btn" className="resume-btn" onClick={() => alert("Resume Course In production")}>Resume Course</button>
-                    <button className="resume-btn" onClick={() => openDetails(course)}>View Details</button>
+                    <button id="resume-btn" className="resume-btn" onClick={() => navigate(`/resume-course/${course.id}`)}>Resume Course</button>
+                    {/* <button className="resume-btn" onClick={() => openDetails(course)}>View Details</button> */}
                   </div>
                 </div>
               ))
@@ -176,15 +176,15 @@ const Course = () => {
             </div>
           )}
         </div>
-
-        {!isMobile && (
+          
+        {/* {!isMobile && (
           <div className="righty">
             <Assignment showToast={showToast} />
             {toast.show && (
               <Toast message={toast.message} type={toast.type} onClose={handleCloseToast} />
             )}
           </div>
-        )}
+        )} */}
       </div>
     </>
   );

@@ -44,13 +44,13 @@ const Navbar = () => {
                   My Profile
                 </button>
               </li>
-              <li>
+              {/* <li>
                 <button onClick={() => { setDropdownOpen(false); navigate("/change-password"); }}>
                   Change Password
                 </button>
-              </li>
+              </li> */}
               <li>
-                <button onClick={() => { setDropdownOpen(false); alert("In development") }}> 
+                <button onClick={() => { setDropdownOpen(false); navigate("/settings") }}> 
                   Settings
                 </button>
               </li>

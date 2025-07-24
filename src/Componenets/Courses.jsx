@@ -6,12 +6,10 @@ import { useNavigate } from 'react-router-dom';
 const Course = ({ showToast }) => {
   const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
   const userEmail = loginInfo?.email;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const [durationWeeks, setDurationWeeks] = useState(0);
   const [weeklyTopics, setWeeklyTopics] = useState([]);
-
-
-
   const [courses, setCourses] = useState(() => {
     if (!userEmail) return [];
     return JSON.parse(localStorage.getItem(`courses_${userEmail}`)) || [];
@@ -19,6 +17,21 @@ const Course = ({ showToast }) => {
 
   const [showForm, setShowForm] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
+
+  // ✅ Bulk fix for old courses without IDs and topic IDs
+  useEffect(() => {
+    if (userEmail && courses.some(course => !course.id || course.topics?.some(topic => !topic.id))) {
+      const fixed = courses.map(course => ({
+        ...course,
+        id: course.id || crypto.randomUUID(),
+        topics: (course.topics || []).map(topic => ({
+          ...topic,
+          id: topic.id || crypto.randomUUID(),
+        })),
+      }));
+      setCourses(fixed); // triggers localStorage update via next useEffect
+    }
+  }, [courses, userEmail]);
 
   useEffect(() => {
     if (userEmail) {
@@ -46,13 +59,37 @@ const Course = ({ showToast }) => {
     return nextIndex !== null ? weekdays[nextIndex] : 'Not scheduled';
   };
 
+  const handleFileUpload = (e, index) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const updated = [...weeklyTopics];
+      updated[index] = {
+        ...updated[index],
+        fileName: file.name,
+        fileData: reader.result,
+      };
+      setWeeklyTopics(updated);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleAddOrUpdateCourse = (e) => {
     e.preventDefault();
     const form = e.target;
     const selectedDays = Array.from(form.days.selectedOptions).map(opt => opt.value);
     const nextDay = getNextLearningDay(selectedDays);
 
+    // ✅ Assign ID properly whether editing or not
+    let existingCourseId = editingIndex !== null ? courses[editingIndex]?.id : null;
+    if (!existingCourseId) {
+      existingCourseId = crypto.randomUUID();
+    }
+
     const newCourse = {
+      id: existingCourseId,
       name: form.name.value,
       code: form.code.value,
       instructor: form.instructor.value,
@@ -62,7 +99,10 @@ const Course = ({ showToast }) => {
       textbook: form.textbook.value,
       assignment: form.assignment.value,
       durationWeeks,
-      topics: weeklyTopics
+      topics: weeklyTopics.map(topic => ({
+        ...topic,
+        id: topic.id || crypto.randomUUID()
+      })),
     };
 
     const updatedCourses = [...courses];
@@ -92,7 +132,7 @@ const Course = ({ showToast }) => {
     const updatedCourses = courses.filter((_, i) => i !== index);
     setCourses(updatedCourses);
     if (showToast) {
-      showToast(editingIndex !== null ? "Course deleted successfully": "Course deleted successfully" );
+      showToast("Course deleted successfully");
     }
   };
 
@@ -101,12 +141,11 @@ const Course = ({ showToast }) => {
   }
 
   const getProgress = (course) => {
-  const { code, topics = [] } = course || {};
-  if (!topics.length) return 0;
-
-  const completed = JSON.parse(localStorage.getItem(`completedTopics_${code}`)) || [];
-  return Math.round((completed.length / topics.length) * 100);
-};
+    const { code, topics = [] } = course || {};
+    if (!topics.length) return 0;
+    const completed = JSON.parse(localStorage.getItem(`completedTopics_${code}`)) || [];
+    return Math.round((completed.length / topics.length) * 100);
+  };
 
   return (
     <div className="dashboard">
@@ -139,24 +178,55 @@ const Course = ({ showToast }) => {
               onChange={(e) => {
                 const weeks = parseInt(e.target.value, 10);
                 setDurationWeeks(weeks);
-                setWeeklyTopics(Array.from({ length: weeks }, (_, i) => weeklyTopics[i] || ""));
+                setWeeklyTopics(prev =>
+                  Array.from({ length: weeks }, (_, i) => prev[i] || { title: "", notes: "", resourceLink: "", fileName: "", fileData: "" })
+                );
               }}
               required
             />
 
             {weeklyTopics.map((topic, index) => (
-              <input
-                key={index}
-                type="text"
-                placeholder={`Topic for Week ${index + 1}`}
-                value={topic}
-                onChange={(e) => {
-                  const updated = [...weeklyTopics];
-                  updated[index] = e.target.value;
-                  setWeeklyTopics(updated);
-                }}
-                required
-              />
+              <div key={index} className="topic-section">
+                <input
+                  type="text"
+                  placeholder={`Topic for Week ${index + 1}`}
+                  value={topic.title}
+                  onChange={(e) => {
+                    const updated = [...weeklyTopics];
+                    updated[index].title = e.target.value;
+                    setWeeklyTopics(updated);
+                  }}
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Optional Notes"
+                  value={topic.notes}
+                  onChange={(e) => {
+                    const updated = [...weeklyTopics];
+                    updated[index].notes = e.target.value;
+                    setWeeklyTopics(updated);
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Slide Link (Google Drive, etc.)"
+                  value={topic.resourceLink}
+                  onChange={(e) => {
+                    const updated = [...weeklyTopics];
+                    updated[index].resourceLink = e.target.value;
+                    setWeeklyTopics(updated);
+                  }}
+                />
+                <input
+                  type="file"
+                  accept=".pdf,.ppt,.pptx,.docx"
+                  onChange={(e) => handleFileUpload(e, index)}
+                />
+                {topic.fileName && (
+                  <p className="file-label">📎 {topic.fileName}</p>
+                )}
+              </div>
             ))}
 
             <label>Select Learning Days:</label>
@@ -186,7 +256,7 @@ const Course = ({ showToast }) => {
                 <span className="course-progress-label"> {getProgress(course)}% Completed</span>
               </div>
               <div className="card-buttons">
-                <button className="resume-btn" id='rsm' onClick={() => alert("Resume Course In production")}>
+                <button className="resume-btn" id='rsm' onClick={() => navigate(`/resume-course/${course.id}`)}>
                   Resume Course
                 </button>
                 <button onClick={() => handleEdit(index)}><FaEdit /></button>

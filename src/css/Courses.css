@@ -262,6 +262,20 @@
 .course-card button:last-child:hover {
   background-color: #b02a37;
 }
+.topic-section {
+  background-color: #f1f5f9;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.file-label {
+  font-size: 14px;
+  color: #1e3a8a;
+}
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
