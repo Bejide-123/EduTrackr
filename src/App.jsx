@@ -11,7 +11,8 @@ import Resume from "./pages/ResumeCourse";
 import Change from "./pages/Change-Password";
 import ForgotPassword from "./pages/Forgot-password";
 import Profile from "./pages/Profile";
-import Settings from "./pages/settings";
+import Settings from "./pages/settings"; 
+import Notification from "./Componenets/Notification";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Route path="/signup" element={<SignUp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/notification" element={<Notification />} />
 
       {/* Protected Routes */}
       <Route

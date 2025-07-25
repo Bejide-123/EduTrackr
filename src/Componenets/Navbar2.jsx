@@ -3,14 +3,18 @@ import '../css/Navbar2.css';
 import { FaBars, FaTimes, FaUserCircle } from 'react-icons/fa';
 import { Link, useNavigate } from "react-router-dom";
 import { IoMdNotificationsOutline } from "react-icons/io";
+import Notification from "../Componenets/Notification";
 
 const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const [showNotification, setShowNotification] = useState(false);
 
   return (
-    <nav className="navbar">
+    <>
+      <Notification show={showNotification} setShow={setShowNotification} />
+      <nav className="navbar">
       <div className="logo"><span className="logo-e">E</span>duTrackr</div>
 
       <ul className="nav-links">
@@ -18,7 +22,7 @@ const Navbar = () => {
         <li><Link to="/courses">Courses</Link></li>
         <li><Link to="/schedule">Schedule</Link></li>
         <li><Link to="/progress" id="progress-link">Progress</Link></li>
-        <li><IoMdNotificationsOutline size={32} color="#1e40af" /></li>
+        <li><IoMdNotificationsOutline size={32} color="#1e40af" onClick={() => setShowNotification(true)}/></li>
       </ul>
 
       
@@ -114,6 +118,7 @@ const Navbar = () => {
         </ul>
       </aside>
     </nav>
+    </>
   );
 };
 
