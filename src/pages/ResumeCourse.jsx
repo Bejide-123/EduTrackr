@@ -7,17 +7,19 @@ import {
   FaLock,
 } from "react-icons/fa";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-// import confetti from "canvas-confetti";
-// import { Player } from "@lottiefiles/react-lottie-player";
-// import celebrateAnimation from "../animations/celebrate.json"; // Place your Lottie file here
+import confetti from "canvas-confetti";
+import { Player } from "@lottiefiles/react-lottie-player";
+import celebrateAnimation from "../assets/Fireworks.json"; // Place your Lottie file here
 
 const Resume = () => {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
   const [completedTopics, setCompletedTopics] = useState([]);
   const [selectedTopic, setSelectedTopic] = useState(null);
-  // const [showCelebration, setShowCelebration] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
@@ -88,7 +90,7 @@ const Resume = () => {
       setShowCelebration(true);
 
       // Hide Lottie after 4 seconds
-      setTimeout(() => setShowCelebration(false), 4000);
+      setTimeout(() => setShowCelebration(false), 10000);
     }
   };
 
@@ -128,7 +130,7 @@ const Resume = () => {
               </div>
 
               <div className="topic-list">
-                {topics.map((topic, index) => {
+                {topics.map((topic) => {
                   const completed = isCompleted(topic.id);
                   const current = selectedTopic?.id === topic.id;
                   let icon;
@@ -157,6 +159,19 @@ const Resume = () => {
                     </div>
                   );
                 })}
+                {progress === 100 && (
+                  <div
+                    className="course-topics certificate-entry"
+                    onClick={() => navigate(`/certificate`)} // Add link to certificate page with course id
+                    
+                    style={{ cursor: "pointer" }}
+                  >
+                    <span className="topic-icon">
+                      <FaCheckCircle color="gold" />
+                    </span>
+                    <span className="topic-title">🎓 View Certificate</span>
+                  </div>
+                )}
               </div>
             </div>
           </aside>
@@ -191,21 +206,24 @@ const Resume = () => {
                 </button>
               </>
             ) : (
-              <p> completed</p>
-              // <div className="all-done-message">
-              //   <p>All topics completed!</p>
+              // <p> completed</p>
+              <div className="all-done-message">
+                {/* <h2>🎉 Congratulations!</h2>
+                <p>
+                  You’ve completed the <strong>{course.name}</strong> course.
+                </p> */}
 
-              //   {showCelebration && (
-              //     <div className="celebration-lottie">
-              //       <Player
-              //         autoplay
-              //         loop={false}
-              //         src={celebrateAnimation}
-              //         style={{ height: "250px", width: "250px" }}
-              //       />
-              //     </div>
-              //   )}
-              // </div>
+                {showCelebration && (
+                  <div className="celebration-lottie">
+                    <Player
+                      autoplay
+                      loop={false}
+                      src={celebrateAnimation}
+                      style={{ height: "250px", width: "250px" }}
+                    />
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>

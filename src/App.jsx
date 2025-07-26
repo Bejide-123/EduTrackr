@@ -13,6 +13,7 @@ import ForgotPassword from "./pages/Forgot-password";
 import Profile from "./pages/Profile";
 import Settings from "./pages/settings"; 
 import Notification from "./Componenets/Notification";
+import Certificate from "./Componenets/Certificate";
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/notification" element={<Notification />} />
-
+      <Route path="/certificate" element={<Certificate />} />
       {/* Protected Routes */}
       <Route
         path="/welcome"

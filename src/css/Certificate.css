@@ -1,0 +1,120 @@
+.certificate-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.certificate-box {
+  width: 100%;
+  max-width: 900px;
+  background: #fff;
+  padding: 2rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+.certificate-border {
+  border: 6px double #1e3a8a;
+  padding: 2rem;
+  position: relative;
+  background-color: #f9fafb;
+}
+
+.certificate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1e3a8a;
+}
+
+.logo-e {
+  color: white; 
+}
+
+.cert-badge {
+  width: 60px;
+  height: 60px;
+}
+
+.cert-heading {
+  text-align: center;
+  font-size: 2rem;
+  margin: 1rem 0 0.25rem;
+  font-weight: bold;
+}
+
+.cert-sub,
+.cert-user,
+.cert-course,
+.cert-date {
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+.cert-user {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.cert-course {
+  font-size: 1.25rem;
+  color: #1e3a8a;
+  font-weight: 600;
+}
+
+.cert-footer {
+  margin-top: 2rem;
+}
+
+.cert-signatures {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.signature-block {
+  text-align: center;
+  width: 45%;
+}
+
+.line {
+  border-bottom: 2px solid #111827;
+  margin-bottom: 0.5rem;
+  height: 2px;
+}
+
+/* New note and button section inside the border */
+.cert-note {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.print-btn {
+  margin-top: 1.5rem;
+  background-color: #1e3a8a;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.print-btn:hover {
+  background-color: #163277;
+}
+
+@media print {
+  .print-btn {
+    display: none;
+  }
+}
