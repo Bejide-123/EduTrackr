@@ -22,6 +22,9 @@ import { MdSettings } from "react-icons/md";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("general"); // default
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   //  const [userFirstName, setUserFirstName] = useState("");
 
@@ -41,9 +44,23 @@ const Settings = () => {
   return (
     <>
       <Navbar />
+      {isSidebarOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
+
+      <button
+        className={`sidebar-toggle ${isSidebarOpen ? "hide" : ""}`}
+        onClick={toggleSidebar}
+      >
+        ☰
+      </button>
+
       <div className="edutrackr-settings-page">
         <div className="edutrackr-settings-container">
-          <aside className="edutrackr-sidebar">
+          <aside className={`edutrackr-sidebar ${isSidebarOpen ? "open" : ""}`}>
             <div className="edutrackr-logo">
               <span className="edutrackr-logo-e">E</span>duTrackr
             </div>
@@ -52,7 +69,9 @@ const Settings = () => {
               <li
                 className={activeTab === "general" ? "active" : ""}
                 onClick={() => {
-                  setActiveTab("general"), handleScrollToSection("general");
+                  setActiveTab("general"),
+                    handleScrollToSection("general"),
+                    setIsSidebarOpen(false);
                 }}
               >
                 General
@@ -61,7 +80,8 @@ const Settings = () => {
                 className={activeTab === "notifications" ? "active" : ""}
                 onClick={() => {
                   setActiveTab("notifications"),
-                    handleScrollToSection("notifications");
+                    handleScrollToSection("notifications"),
+                    setIsSidebarOpen(false);
                 }}
               >
                 Notifications
@@ -69,7 +89,9 @@ const Settings = () => {
               <li
                 className={activeTab === "privacy" ? "active" : ""}
                 onClick={() => {
-                  setActiveTab("privacy"), handleScrollToSection("privacy");
+                  setActiveTab("privacy"),
+                    handleScrollToSection("privacy"),
+                    setIsSidebarOpen(false);
                 }}
               >
                 Privacy
@@ -78,7 +100,8 @@ const Settings = () => {
                 className={activeTab === "preferences" ? "active" : ""}
                 onClick={() => {
                   setActiveTab("preferences"),
-                    handleScrollToSection("preferences");
+                    handleScrollToSection("preferences"),
+                    setIsSidebarOpen(false);
                 }}
               >
                 Preferences
@@ -86,7 +109,9 @@ const Settings = () => {
               <li
                 className={activeTab === "security" ? "active" : ""}
                 onClick={() => {
-                  setActiveTab("security"), handleScrollToSection("security");
+                  setActiveTab("security"),
+                    handleScrollToSection("security"),
+                    setIsSidebarOpen(false);
                 }}
               >
                 Security

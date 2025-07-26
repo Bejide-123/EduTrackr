@@ -4,7 +4,7 @@ import { FaBellSlash } from "react-icons/fa";
 import '../css/Notification.css';
 
 const Notification = ({ show, setShow }) => {
-  const totalNotification = 50;
+  // const totalNotification = 50;
   const notifications = [
     {
       id: 1,
@@ -41,7 +41,7 @@ const Notification = ({ show, setShow }) => {
           </div>
         </div>
         <div className="middle">
-          <h3>{totalNotification} Notification</h3>
+          <h3>{notifications.length} Notification</h3>
           <div className="notification-search">
             <input type="text" placeholder="Search" />
           </div>
@@ -49,7 +49,7 @@ const Notification = ({ show, setShow }) => {
         <div className="lower-header">
           <div className="notification-links">
             <Link to="#">
-              All <span>{10}</span>
+              All <span>{notifications.length}</span>
             </Link>
             <Link to="#">
               Archive <span>{6}</span>

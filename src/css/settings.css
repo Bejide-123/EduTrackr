@@ -25,6 +25,7 @@
   justify-content: space-between;
   height: 100%;
   overflow-y: hidden;
+  border-radius: 0;
 }
 
 .edutrackr-logo {
@@ -329,4 +330,69 @@ input:checked + .slider::before {
 /* Smooth Scroll */
 html {
   scroll-behavior: smooth;
+}
+button.sidebar-toggle {
+  height: 100px;
+}
+.sidebar-toggle {
+  display: none;
+  position: absolute;
+  top: 75px;
+  left: -35px;
+  z-index: 1001;
+  background: #1e40af;
+  color: white;
+  border: none;
+  font-size: 24px;
+  padding: 10px 14px;
+  border-radius: 6px;
+}
+.sidebar-toggle.hide {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .sidebar-toggle {
+    display: block;
+  }
+
+  .edutrackr-settings-container {
+    position: relative;
+  }
+
+  .edutrackr-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .edutrackr-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .edutrackr-main-options {
+    padding-top: 20px;
+    margin-left: 0; /* Reset margin for smaller screens */
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .edutrackr-sidebar {
+    transform: translateX(0);
+    position: relative;
+    width: 240px;
+    height: 100%;
+  }
+
+  .sidebar-toggle {
+    display: none;
+  }
+
+  .edutrackr-main-options {
+    margin-left: 0; /* Adjust as needed */
+  }
 }

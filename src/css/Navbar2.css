@@ -1,4 +1,3 @@
-
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -6,7 +5,7 @@
   background-color: #fff;
   color: #1e40af;
   padding: 0.5rem 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 300;
@@ -42,7 +41,7 @@
   background: #fff;
   border: 1.5px solid #dbeafe;
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(30,64,175,0.10);
+  box-shadow: 0 4px 16px rgba(30, 64, 175, 0.10);
   min-width: 170px;
   z-index: 400;
   padding: 0.5rem 0;
@@ -99,10 +98,11 @@
   color: #2563eb !important;
 }
 
-#logout:focus{
+#logout:focus {
   outline: none;
   box-shadow: none;
 }
+
 .dropdown-menu li a:hover,
 .dropdown-menu li button:hover,
 .dropdown-menu li:hover {
@@ -149,7 +149,7 @@
   display: flex;
   align-items: center;
   gap: 0.2rem;
-  flex-direction: row-reverse; 
+  flex-direction: row-reverse;
 }
 
 .navbar-hamburger {
@@ -161,28 +161,31 @@
   margin-left: 1rem;
 }
 
-      
+
 
 @media (max-width: 900px) {
   .nav-links {
     display: none;
   }
+
   .navbar-hamburger {
     display: block !important;
   }
+
   .navbar-icons {
     margin-left: auto;
     gap: 0.2rem;
-    flex-direction: row-reverse; 
+    flex-direction: row-reverse;
   }
+
   .sidebar {
     display: flex;
     flex-direction: column;
     position: fixed;
     top: 0;
-    left: -260px;
-    min-width: 220px;
-    max-width: 400px;
+    left: -300px;
+    width: 100%;
+    max-width: 300px;
     height: 100vh;
     min-height: 100vh;
     background: #1e40af;
@@ -190,11 +193,15 @@
     z-index: 200;
     transition: left 0.3s;
     padding: 2rem 1rem 1rem 1.5rem;
-    box-shadow: 2px 0 16px rgba(30,64,175,0.10);
+    box-shadow: 2px 0 16px rgba(30, 64, 175, 0.10);
+    border-radius: 0;
+    box-sizing: border-box;
   }
+
   .sidebar.open {
     left: 0;
   }
+
   .sidebar-close {
     background: #1e40af;
     border: none;
@@ -204,6 +211,7 @@
     margin-bottom: 2rem;
     cursor: pointer;
   }
+
   .sidebar ul {
     margin: 0;
     padding: 0;
@@ -212,23 +220,35 @@
     flex-direction: column;
     gap: 1.2rem;
   }
+
   .sidebar ul li a {
     color: #fff;
     font-size: 1.1rem;
     text-decoration: none;
     transition: color 0.2s;
   }
+
   .sidebar ul li a:hover {
     color: #facc15;
   }
+
   .sidebar-overlay {
     display: none;
   }
+
   .sidebar-overlay.open {
     display: block;
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.2);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
     z-index: 150;
   }
+}
+
+html,
+body {
+  overflow-x: hidden;
 }
