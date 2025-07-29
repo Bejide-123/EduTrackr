@@ -1,8 +1,24 @@
-import React from "react";
+import stamp from "../assets/EduTrackr-Stamp.png";
 import "../css/Certificate.css";
+import { useParams } from "react-router-dom";
+import { PageLoader } from "../Componenets/Loaders";
+import { useEffect, useState } from "react";
 
 const Certificate = () => {
+  const [initialLoading, setInitialLoading] = useState(true);
+  const { id } = useParams()
   const currentDate = new Date().toLocaleDateString();
+
+  useEffect(() => {
+        const timer = setTimeout(() => {
+          setInitialLoading(false);
+        }, 3000);
+        return () => clearTimeout(timer);
+      }, []);
+    
+      if (initialLoading) {
+        return <PageLoader />;
+      }
 
   const handlePrint = () => {
     window.print();
@@ -38,6 +54,7 @@ const Certificate = () => {
                 <p>Instructor's Signature</p>
               </div>
               <div className="signature-block">
+                <img src={stamp} alt="EduTrackr Seal" className="seal-image" />
                 <div className="line"></div>
                 <p>EduTrackr Seal</p>
               </div>

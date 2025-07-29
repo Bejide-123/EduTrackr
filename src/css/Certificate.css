@@ -1,21 +1,31 @@
 .certificate-container {
   display: flex;
   justify-content: center;
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .certificate-box {
   width: 100%;
-  max-width: 900px;
+  max-width: 800px;
   background: #fff;
-  padding: 2rem;
+  padding: 1.5rem;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
 }
-
+.certificate-box::before{
+  content: "EduTrackr";
+  position: absolute;
+  font-size: 6rem;
+  color: rgba(0, 0, 0, 0.5);
+  transform: rotate(-30deg);
+  z-index: 0;
+  top: 30%;
+  left: 25%;
+  pointer-events: none;
+}
 .certificate-border {
   border: 6px double #1e3a8a;
-  padding: 2rem;
+  padding: 1.3rem;
   position: relative;
   background-color: #f9fafb;
 }
@@ -27,24 +37,24 @@
 }
 
 .logo {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: bold;
   color: #1e3a8a;
 }
 
 .logo-e {
-  color: white; 
+  color: white;
 }
 
 .cert-badge {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
 }
 
 .cert-heading {
   text-align: center;
-  font-size: 2rem;
-  margin: 1rem 0 0.25rem;
+  font-size: 1.8rem;
+  margin: 0.5rem 0 0.25rem;
   font-weight: bold;
 }
 
@@ -53,58 +63,68 @@
 .cert-course,
 .cert-date {
   text-align: center;
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
 }
 
 .cert-user {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 600;
   color: #111827;
 }
 
 .cert-course {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   color: #1e3a8a;
   font-weight: 600;
 }
 
 .cert-footer {
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .cert-signatures {
   display: flex;
   justify-content: space-between;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .signature-block {
   text-align: center;
   width: 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.seal-image {
+  width: 100px;
+  margin-bottom: 0.25rem;
 }
 
 .line {
   border-bottom: 2px solid #111827;
-  margin-bottom: 0.5rem;
+  width: 100%;
   height: 2px;
+  margin-bottom: 0.25rem;
 }
 
 /* New note and button section inside the border */
 .cert-note {
-  margin-top: 2rem;
+  margin-top: 1rem;
   text-align: center;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #374151;
 }
 
 .print-btn {
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   background-color: #1e3a8a;
   color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 0.6rem 1.2rem;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: background 0.3s;
 }

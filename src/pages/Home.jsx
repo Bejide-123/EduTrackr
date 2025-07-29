@@ -7,8 +7,21 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { FaUsers, FaCheckCircle, FaClock, FaSmile } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { PageLoader, ButtonLoader, SectionLoader } from "../Componenets/Loaders";
+
 
 const Home = () => {
+      const [loading, setLoading] = useState(true);
+      useEffect(() => {
+            const timer = setTimeout(() => {
+                  setLoading(false);
+            }, 7000); 
+            return () => clearTimeout(timer);
+      }, []);
+      if (loading) {
+            return <PageLoader />;
+      }
   return (
     <div>
       <Navbar />

@@ -12,8 +12,10 @@ import { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
 import { Player } from "@lottiefiles/react-lottie-player";
 import celebrateAnimation from "../assets/Fireworks.json"; // Place your Lottie file here
+import { PageLoader } from "../Componenets/Loaders";
 
 const Resume = () => {
+  const [initialLoading, setInitialLoading] = useState(true);
   const { id } = useParams();
   const [course, setCourse] = useState(null);
   const [completedTopics, setCompletedTopics] = useState([]);
@@ -40,6 +42,17 @@ const Resume = () => {
     const firstUncompleted = topics.find((t) => !completed.includes(t.id));
     setSelectedTopic(firstUncompleted || topics[0]);
   }, [id]);
+
+   useEffect(() => {
+        const timer = setTimeout(() => {
+          setInitialLoading(false);
+        }, 3000);
+        return () => clearTimeout(timer);
+      }, []);
+    
+      if (initialLoading) {
+        return <PageLoader />;
+      }
 
   if (!course) {
     return (

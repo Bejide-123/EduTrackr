@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/login.css'; 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock, FaGoogle } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import Toast from "../Componenets/Toast";
+import { PageLoader } from "../Componenets/Loaders";
 
 const Login = () => {
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [formLoading, setFormLoading] = useState(false);
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const [toast, setToast] = useState({ show: false, message: '', type: '' });
+  const navigate = useNavigate();
+
+  // Handle initial page animation loader
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (initialLoading) {
+    return <PageLoader />;
+  }
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
@@ -23,20 +36,19 @@ const Login = () => {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setFormLoading(true);
     setError('');
 
     if (!form.email || !form.password) {
       setError('Please fill in all fields.');
       showToast("Please fill in all fields.", "error");
-      setLoading(false);
+      setFormLoading(false);
       return;
     }
 
-    // Get users from localStorage
     const users = JSON.parse(localStorage.getItem('users')) || [];
     const user = users.find(
       u => u.email === form.email && u.password === form.password
@@ -45,21 +57,22 @@ const Login = () => {
     if (user) {
       const { ...userInfo } = user;
       localStorage.setItem('loginInfo', JSON.stringify(userInfo));
-      setLoading(false);
-      showToast("Login Successful", "success");
-      setTimeout(() => {
-        navigate("/welcome")
-      }, 1000);
       localStorage.setItem("currentUser", JSON.stringify(user));
+      showToast("Login Successful", "success");
+
+      setTimeout(() => {
+        navigate("/welcome");
+      }, 1000);
     } else {
       setError("Invalid email or password.");
-      setLoading(false);
       showToast("Invalid email or password.", "error");
     }
+
+    setFormLoading(false);
   };
 
   const handleGoogleSignIn = () => {
-    alert("Google sign-in coming soon!, Please create an account using email and password.");
+    alert("Google sign-in coming soon! Please create an account using email and password.");
   };
 
   return (
@@ -105,16 +118,17 @@ const Login = () => {
           <Link to="/forgot-password" className="forgot-link">Forgot password?</Link>
         </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
+        <button type="submit" disabled={formLoading}>
+          {formLoading ? 'Logging in...' : 'Login'}
         </button>
-          {toast.show && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={handleCloseToast}
-        />
-      )}
+
+        {toast.show && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={handleCloseToast}
+          />
+        )}
 
         <button
           type="button"
@@ -133,6 +147,7 @@ const Login = () => {
           </span>
           Sign in with Google
         </button>
+
         <div className="signup-link">
           Don&apos;t have an account? <Link to="/signup">Create one</Link>
         </div>
@@ -142,6 +157,7 @@ const Login = () => {
 };
 
 export default Login;
+
 
 
 
