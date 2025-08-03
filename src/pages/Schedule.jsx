@@ -3,17 +3,21 @@ import { FaPlus } from "react-icons/fa";
 import "../css/Schedule.css";
 import { useState, useEffect } from "react";
 import Toast from "../Componenets/Toast";
+import { PageLoader } from "../Componenets/Loaders";
+import { ButtonLoader } from "../Componenets/Loaders";
 
 const Schedule = () => {
+  const [initialLoading, setInitialLoading] = useState(true);
   const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
   const userEmail = loginInfo?.email;
-
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [courses, setCourses] = useState([]);
   const [schedules, setSchedules] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
   const [countdown, setCountdown] = useState("");
   const [currentTarget, setCurrentTarget] = useState(null);
+  const [formLoading, setFormLoading] = useState(false);
 
   const showToast = (message, type = "success") => {
     setToast({ show: true, message, type });
@@ -32,6 +36,13 @@ const Schedule = () => {
     repeat: "",
     reminder: "",
   });
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 3000); // simulate a loading delay
+    return () => clearTimeout(timer);
+  }, []);
 
   // Load user courses & saved schedules on mount
   useEffect(() => {
@@ -83,6 +94,10 @@ const Schedule = () => {
     return () => clearInterval(interval);
   }, [schedules]);
 
+  if (initialLoading) {
+    return <PageLoader />;
+  }
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prevForm) => ({
@@ -114,6 +129,7 @@ const Schedule = () => {
   };
 
   const Done = () => {
+    setFormLoading(true);
     const newSchedule = { ...form };
     const updatedSchedules = [...schedules, newSchedule];
 
@@ -135,8 +151,6 @@ const Schedule = () => {
     acc[day].push(schedule);
     return acc;
   }, {});
-
-  const [selectedSchedule, setSelectedSchedule] = useState(null);
 
   const handleScheduleClick = (schedule) => {
     setSelectedSchedule(schedule);
@@ -403,7 +417,9 @@ const Schedule = () => {
                     <button onClick={closePopup} className="cancel">
                       Cancel
                     </button>
-                    <button type="submit">Add</button>
+                    <button type="submit" disabled={formLoading}>
+                      {formLoading ? <ButtonLoader /> : "Add"}
+                    </button>
                   </div>
                 </form>
               </>

@@ -11,17 +11,28 @@
 
 // Add to your existing imports at the top
 import "../css/signup.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaEnvelope, FaLock, FaUser, FaQuestionCircle } from "react-icons/fa"; // added icon
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Toast from "../Componenets/Toast";
+import { PageLoader } from "../Componenets/Loaders"; // Assuming you have a PageLoader component
+import { ButtonLoader } from "../Componenets/Loaders"; // Assuming you have a ButtonLoader component
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const [toast, setToast] = useState({ show: false, message: '', type: '' });
+  const [toast, setToast] = useState({ show: false, message: "", type: "" });
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [formLoading, setFormLoading] = useState(false);
 
-  const showToast = (message, type = 'success') => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const showToast = (message, type = "success") => {
     setToast({ show: true, message, type });
   };
 
@@ -48,40 +59,52 @@ const SignUp = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
+    setFormLoading(true); // start loading
 
-    if (form.password !== form.confirmPassword) {
-      setError("Passwords do not match.");
-      showToast("Passwords do not match.", "error");
-      return;
-    }
+    // simulate delay like API call
+    setTimeout(() => {
+      if (form.password !== form.confirmPassword) {
+        setError("Passwords do not match.");
+        showToast("Passwords do not match.", "error");
+        setFormLoading(false); // stop loading
+        return;
+      }
 
-    if (!form.securityQuestion || !form.securityAnswer) {
-      showToast("Please complete the security question.", "error");
-      return;
-    }
+      if (!form.securityQuestion || !form.securityAnswer) {
+        showToast("Please complete the security question.", "error");
+        setFormLoading(false);
+        return;
+      }
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+      const users = JSON.parse(localStorage.getItem("users")) || [];
 
-    if (users.some((u) => u.email === form.email)) {
-      setError("Email already registered.");
-      showToast("Email already registered. Proceed to Login", "error");
-      return;
-    }
+      if (users.some((u) => u.email === form.email)) {
+        setError("Email already registered.");
+        showToast("Email already registered. Proceed to Login", "error");
+        setFormLoading(false);
+        return;
+      }
 
-    const newUser = {
-      name: form.name,
-      email: form.email,
-      password: form.password,
-      role: form.role,
-      securityQuestion: form.securityQuestion,
-      securityAnswer: form.securityAnswer.toLowerCase().trim(), // store normalized
-    };
+      const newUser = {
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        role: form.role,
+        securityQuestion: form.securityQuestion,
+        securityAnswer: form.securityAnswer.toLowerCase().trim(),
+      };
 
-    users.push(newUser);
-    localStorage.setItem("users", JSON.stringify(users));
-    showToast("Account Successfully Created", "success");
-    navigate("/login");
+      users.push(newUser);
+      localStorage.setItem("users", JSON.stringify(users));
+      showToast("Account Successfully Created", "success");
+      setFormLoading(false); // stop loading
+      navigate("/login");
+    }, 1000);
   };
+  if (initialLoading) {
+    return <PageLoader />;
+  }
+
 
   return (
     <div className="signup-page">
@@ -187,17 +210,39 @@ const SignUp = () => {
             value={form.securityQuestion}
             onChange={handleChange}
           >
-            <option value="" disabled>Select a security question</option>
-            <option value="What is your favorite color?">What is your favorite color?</option>
-            <option value="What was the name of your first pet?">What was the name of your first pet?</option>
-            <option value="What city were you born in?">What city were you born in?</option>
-            <option value="What is your mother’s maiden name?">What is your mother’s maiden name?</option>
-            <option value="What is your favorite food?">What is your favorite food?</option>
-            <option value="What is the name of your primary school?">What is the name of your primary school?</option>
-            <option value="What was your childhood nickname?">What was your childhood nickname?</option>
-            <option value="What is your favorite movie?">What is your favorite movie?</option>
-            <option value="What is the name of your best friend in high school?">What is the name of your best friend in high school?</option>
-            <option value="What is your dream job?">What is your dream job?</option>
+            <option value="" disabled>
+              Select a security question
+            </option>
+            <option value="What is your favorite color?">
+              What is your favorite color?
+            </option>
+            <option value="What was the name of your first pet?">
+              What was the name of your first pet?
+            </option>
+            <option value="What city were you born in?">
+              What city were you born in?
+            </option>
+            <option value="What is your mother’s maiden name?">
+              What is your mother’s maiden name?
+            </option>
+            <option value="What is your favorite food?">
+              What is your favorite food?
+            </option>
+            <option value="What is the name of your primary school?">
+              What is the name of your primary school?
+            </option>
+            <option value="What was your childhood nickname?">
+              What was your childhood nickname?
+            </option>
+            <option value="What is your favorite movie?">
+              What is your favorite movie?
+            </option>
+            <option value="What is the name of your best friend in high school?">
+              What is the name of your best friend in high school?
+            </option>
+            <option value="What is your dream job?">
+              What is your dream job?
+            </option>
           </select>
         </div>
 
@@ -218,8 +263,8 @@ const SignUp = () => {
           </div>
         </div>
 
-        <button type="submit" className="signup-btn">
-          Sign Up
+        <button type="submit" className="signup-btn" disabled={formLoading}>
+          {formLoading ? <ButtonLoader /> : "Sign Up"}
         </button>
 
         {toast.show && (

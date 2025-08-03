@@ -263,15 +263,12 @@
     padding: 1rem;
   }
 
-  .lefty, .courses-card {
+  .lefty, .courses-card, .righty {
     width: 100%;
   }
-
-  .righty {
-    display: none; 
-  }
-    .courses-header h3{
-    margin-left: -70px;
+  
+  .courses-header h3{
+    margin-left: 0;
   }
 
   .btns {

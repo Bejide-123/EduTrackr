@@ -1,13 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import '../css/Courses.css';
-import { FaPlus, FaEdit, FaTrash, FaCalendarAlt, FaUser, FaBook } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import "../css/Courses.css";
+import {
+  FaPlus,
+  FaEdit,
+  FaTrash,
+  FaCalendarAlt,
+  FaUser,
+  FaBook,
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { ButtonLoader } from "../Componenets/Loaders";
 
 const Course = ({ showToast }) => {
   const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
   const userEmail = loginInfo?.email;
   const navigate = useNavigate();
-
+  const [formLoading, setFormLoading] = useState(false);
   const [durationWeeks, setDurationWeeks] = useState(0);
   const [weeklyTopics, setWeeklyTopics] = useState([]);
   const [courses, setCourses] = useState(() => {
@@ -20,11 +28,16 @@ const Course = ({ showToast }) => {
 
   // ✅ Bulk fix for old courses without IDs and topic IDs
   useEffect(() => {
-    if (userEmail && courses.some(course => !course.id || course.topics?.some(topic => !topic.id))) {
-      const fixed = courses.map(course => ({
+    if (
+      userEmail &&
+      courses.some(
+        (course) => !course.id || course.topics?.some((topic) => !topic.id)
+      )
+    ) {
+      const fixed = courses.map((course) => ({
         ...course,
         id: course.id || crypto.randomUUID(),
-        topics: (course.topics || []).map(topic => ({
+        topics: (course.topics || []).map((topic) => ({
           ...topic,
           id: topic.id || crypto.randomUUID(),
         })),
@@ -41,22 +54,30 @@ const Course = ({ showToast }) => {
   }, [courses, userEmail]);
 
   const toggleForm = () => {
-    setShowForm(prev => !prev);
+    setShowForm((prev) => !prev);
     setEditingIndex(null);
     setWeeklyTopics([]);
     setDurationWeeks(0);
   };
 
   const getNextLearningDay = (selectedDays) => {
-    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const weekdays = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
     const today = new Date().getDay();
     const futureDays = selectedDays
-      .map(day => weekdays.indexOf(day))
-      .filter(index => index !== -1)
-      .sort((a, b) => (a - today + 7) % 7 - (b - today + 7) % 7);
+      .map((day) => weekdays.indexOf(day))
+      .filter((index) => index !== -1)
+      .sort((a, b) => ((a - today + 7) % 7) - ((b - today + 7) % 7));
 
     const nextIndex = futureDays.length > 0 ? futureDays[0] : null;
-    return nextIndex !== null ? weekdays[nextIndex] : 'Not scheduled';
+    return nextIndex !== null ? weekdays[nextIndex] : "Not scheduled";
   };
 
   const handleFileUpload = (e, index) => {
@@ -78,12 +99,16 @@ const Course = ({ showToast }) => {
 
   const handleAddOrUpdateCourse = (e) => {
     e.preventDefault();
+    setFormLoading(true); // Start loading
+
     const form = e.target;
-    const selectedDays = Array.from(form.days.selectedOptions).map(opt => opt.value);
+    const selectedDays = Array.from(form.days.selectedOptions).map(
+      (opt) => opt.value
+    );
     const nextDay = getNextLearningDay(selectedDays);
 
-    // ✅ Assign ID properly whether editing or not
-    let existingCourseId = editingIndex !== null ? courses[editingIndex]?.id : null;
+    let existingCourseId =
+      editingIndex !== null ? courses[editingIndex]?.id : null;
     if (!existingCourseId) {
       existingCourseId = crypto.randomUUID();
     }
@@ -99,28 +124,40 @@ const Course = ({ showToast }) => {
       textbook: form.textbook.value,
       assignment: form.assignment.value,
       durationWeeks,
-      topics: weeklyTopics.map(topic => ({
+      topics: weeklyTopics.map((topic) => ({
         ...topic,
-        id: topic.id || crypto.randomUUID()
+        id: topic.id || crypto.randomUUID(),
       })),
     };
 
-    const updatedCourses = [...courses];
-    if (editingIndex !== null) {
-      updatedCourses[editingIndex] = newCourse;
-    } else {
-      updatedCourses.unshift(newCourse);
-    }
+    // Simulate loading delay
+    setTimeout(() => {
+      const updatedCourses = [...courses];
+      if (editingIndex !== null) {
+        updatedCourses[editingIndex] = newCourse;
+      } else {
+        updatedCourses.unshift(newCourse);
+      }
 
-    setCourses(updatedCourses);
-    form.reset();
-    toggleForm();
-    if (showToast) {
-      showToast(editingIndex !== null ? "Course updated successfully" : "Course added successfully", "success");
-    }
+      setCourses(updatedCourses);
+      form.reset();
+      toggleForm();
+
+      if (showToast) {
+        showToast(
+          editingIndex !== null
+            ? "Course updated successfully"
+            : "Course added successfully",
+          "success"
+        );
+      }
+
+      setFormLoading(false); // End loading
+    }, 1000);
   };
 
-  const handleEdit = (index) => {
+  const handleEdit = (e, index) => {
+    e.stopPropagation(); // Prevent card click
     const course = courses[index];
     setEditingIndex(index);
     setDurationWeeks(course.durationWeeks || 0);
@@ -128,7 +165,8 @@ const Course = ({ showToast }) => {
     setShowForm(true);
   };
 
-  const handleDelete = (index) => {
+  const handleDelete = (e, index) => {
+    e.stopPropagation(); // Prevent card click
     const updatedCourses = courses.filter((_, i) => i !== index);
     setCourses(updatedCourses);
     if (showToast) {
@@ -137,13 +175,18 @@ const Course = ({ showToast }) => {
   };
 
   if (!userEmail) {
-    return <div className="dashboard"><h2>Please log in to view your courses.</h2></div>;
+    return (
+      <div className="dashboard">
+        <h2>Please log in to view your courses.</h2>
+      </div>
+    );
   }
 
   const getProgress = (course) => {
     const { code, topics = [] } = course || {};
     if (!topics.length) return 0;
-    const completed = JSON.parse(localStorage.getItem(`completedTopics_${code}`)) || [];
+    const completed =
+      JSON.parse(localStorage.getItem(`completedTopics_${code}`)) || [];
     return Math.round((completed.length / topics.length) * 100);
   };
 
@@ -152,7 +195,11 @@ const Course = ({ showToast }) => {
       <div className="courses-header">
         <h2>Courses</h2>
         {!showForm && (
-          <button className="add-course-icon" onClick={toggleForm} title="Add Course">
+          <button
+            className="add-course-icon"
+            onClick={toggleForm}
+            title="Add Course"
+          >
             <FaPlus size={20} />
           </button>
         )}
@@ -162,12 +209,57 @@ const Course = ({ showToast }) => {
         <>
           <div className="form-overlay" onClick={toggleForm}></div>
           <form className="course-form" onSubmit={handleAddOrUpdateCourse}>
-            <input type="text" name="name" placeholder="Course Name" required defaultValue={editingIndex !== null ? courses[editingIndex].name : ''} />
-            <input type="text" name="code" placeholder="Course Code" required defaultValue={editingIndex !== null ? courses[editingIndex].code : ''} />
-            <input type="text" name="instructor" placeholder="Instructor Name" required defaultValue={editingIndex !== null ? courses[editingIndex].instructor : ''} />
-            <input type="text" name="description" placeholder="Brief Description" defaultValue={editingIndex !== null ? courses[editingIndex].description : ''} />
-            <input type="text" name="textbook" placeholder="Recommended Textbook" defaultValue={editingIndex !== null ? courses[editingIndex].textbook : ''} />
-            <input type="text" name="assignment" placeholder="Assignments Info" defaultValue={editingIndex !== null ? courses[editingIndex].assignment : ''} />
+            <input
+              type="text"
+              name="name"
+              placeholder="Course Name"
+              required
+              defaultValue={
+                editingIndex !== null ? courses[editingIndex].name : ""
+              }
+            />
+            <input
+              type="text"
+              name="code"
+              placeholder="Course Code"
+              required
+              defaultValue={
+                editingIndex !== null ? courses[editingIndex].code : ""
+              }
+            />
+            <input
+              type="text"
+              name="instructor"
+              placeholder="Instructor Name"
+              required
+              defaultValue={
+                editingIndex !== null ? courses[editingIndex].instructor : ""
+              }
+            />
+            <input
+              type="text"
+              name="description"
+              placeholder="Brief Description"
+              defaultValue={
+                editingIndex !== null ? courses[editingIndex].description : ""
+              }
+            />
+            <input
+              type="text"
+              name="textbook"
+              placeholder="Recommended Textbook"
+              defaultValue={
+                editingIndex !== null ? courses[editingIndex].textbook : ""
+              }
+            />
+            <input
+              type="text"
+              name="assignment"
+              placeholder="Assignments Info"
+              defaultValue={
+                editingIndex !== null ? courses[editingIndex].assignment : ""
+              }
+            />
 
             <label>Number of Weeks:</label>
             <input
@@ -178,8 +270,18 @@ const Course = ({ showToast }) => {
               onChange={(e) => {
                 const weeks = parseInt(e.target.value, 10);
                 setDurationWeeks(weeks);
-                setWeeklyTopics(prev =>
-                  Array.from({ length: weeks }, (_, i) => prev[i] || { title: "", notes: "", resourceLink: "", fileName: "", fileData: "" })
+                setWeeklyTopics((prev) =>
+                  Array.from(
+                    { length: weeks },
+                    (_, i) =>
+                      prev[i] || {
+                        title: "",
+                        notes: "",
+                        resourceLink: "",
+                        fileName: "",
+                        fileData: "",
+                      }
+                  )
                 );
               }}
               required
@@ -230,37 +332,104 @@ const Course = ({ showToast }) => {
             ))}
 
             <label>Select Learning Days:</label>
-            <select name="days" multiple required defaultValue={editingIndex !== null ? courses[editingIndex].days : []}>
-              {['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].map(day => (
-                <option key={day} value={day}>{day}</option>
+            <select
+              name="days"
+              multiple
+              required
+              defaultValue={
+                editingIndex !== null ? courses[editingIndex].days : []
+              }
+            >
+              {[
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday",
+              ].map((day) => (
+                <option key={day} value={day}>
+                  {day}
+                </option>
               ))}
             </select>
 
-            <button type="submit">{editingIndex !== null ? 'Update Course' : 'Save Course'}</button>
+            <button id="save-course" type="submit" disabled={formLoading}>
+              {formLoading ? (
+                <>
+                  Saving <ButtonLoader />
+                </>
+              ) : editingIndex !== null ? (
+                "Update Course"
+              ) : (
+                "Save Course"
+              )}
+            </button>
           </form>
         </>
       )}
 
       <div className="courses-list">
         {courses.map((course, index) => (
-          <div className="course-card" key={index}>
-            <h3><FaBook color='#1e40af' style={{ marginRight: '8px' }} /> {course.name}</h3>
-            <p><strong><FaUser style={{ marginRight: '6px' }} />Instructor:</strong> {course.instructor}</p>
-            <p><strong><FaCalendarAlt style={{ marginRight: '6px' }} />Next Day:</strong> {course.nextDay}</p>
+          <div
+            className="course-card"
+            key={index}
+            onClick={() => {
+              if (window.innerWidth <= 540) {
+                navigate(`/resume-course/${course.id}`);
+              }
+            }}
+          >
+            <h3>
+              <FaBook color="#1e40af" style={{ marginRight: "8px" }} />{" "}
+              {course.name}
+            </h3>
+            <p>
+              <strong>
+                <FaUser style={{ marginRight: "6px" }} />
+                Instructor:
+              </strong>{" "}
+              {course.instructor}
+            </p>
+            <p>
+              <strong>
+                <FaCalendarAlt style={{ marginRight: "6px" }} />
+                Next Day:
+              </strong>{" "}
+              {course.nextDay}
+            </p>
 
             <div className="course-card-bottom">
               <div className="course-progress-row">
                 <div className="course-progress-bar">
-                  <div className="course-progress-fill" style={{ width: `${getProgress(course)}%` }}></div>
+                  <div
+                    className="course-progress-fill"
+                    style={{ width: `${getProgress(course)}%` }}
+                  ></div>
                 </div>
-                <span className="course-progress-label"> {getProgress(course)}% Completed</span>
+                <span className="course-progress-label">
+                  {" "}
+                  {getProgress(course)}% Completed
+                </span>
               </div>
               <div className="card-buttons">
-                <button className="resume-btn" id='rsm' onClick={() => navigate(`/resume-course/${course.id}`)}>
+                <button
+                  className="resume-btn"
+                  id="rsm"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent card click
+                    navigate(`/resume-course/${course.id}`);
+                  }}
+                >
                   Resume Course
                 </button>
-                <button onClick={() => handleEdit(index)}><FaEdit /></button>
-                <button onClick={() => handleDelete(index)}><FaTrash /></button>
+                <button onClick={(e) => handleEdit(e, index)}>
+                  <FaEdit />
+                </button>
+                <button onClick={(e) => handleDelete(e, index)}>
+                  <FaTrash />
+                </button>
               </div>
             </div>
           </div>

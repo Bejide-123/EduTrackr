@@ -148,6 +148,8 @@ aside {
   border-radius: 8px;
 }
 
+
+
 /* .certificate-background {
   background: url('/https://i.ibb.co/3sBm5TC/certificate-background-simple.png') center/cover no-repeat;
   color: #fff;
@@ -192,10 +194,22 @@ aside {
     align-items: flex-start;
   }
 
-  iframe {
+
+}
+/* Fix PDF iframe display issue on small screens */
+@media (max-width: 768px) {
+  .pdf-container {
+    margin-top: 1rem;
     width: 100%;
-    height: 60vh;
-    border: none;
+    height: 60vh; /* Ensure height stays consistent */
   }
 
+  .pdf-container iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    display: block;
+    border: none;
+    border-radius: 8px;
+  }
 }

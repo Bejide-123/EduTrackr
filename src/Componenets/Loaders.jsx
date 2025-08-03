@@ -26,7 +26,17 @@ export const PageLoader = () => (
   </div>
 );
 
-export const ButtonLoader = () => <div className="button-spinner" />;
+export const ButtonLoader = ({ size = 20, color = "white" }) => (
+  <div
+    className="button-spinner"
+    style={{
+      width: size,
+      height: size,
+      borderTopColor: color,
+    }}
+  />
+);
+
 
 export const SectionLoader = () => (
   <div className="section-loader">

@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../Componenets/Navbar2";
 import "../css/settings.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FaCogs,
   FaBell,
@@ -19,10 +19,30 @@ import {
 } from "react-icons/fa";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { MdSettings } from "react-icons/md";
+import { PageLoader } from "../Componenets/Loaders";
+import { ButtonLoader } from "../Componenets/Loaders";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("general"); // default
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [securityLoading, setSecurityLoading] = useState({
+    twoFactor: false,
+    changePassword: false,
+    viewHistory: false,
+    logoutAll: false,
+  });
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (initialLoading) {
+    return <PageLoader />;
+  }
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
@@ -39,6 +59,14 @@ const Settings = () => {
       section.scrollIntoView({ behavior: "smooth" });
       setActiveTab(sectionId); // for highlighting
     }
+  };
+
+  const handleSecurityAction = (actionKey, callback) => {
+    setSecurityLoading((prev) => ({ ...prev, [actionKey]: true }));
+    setTimeout(() => {
+      setSecurityLoading((prev) => ({ ...prev, [actionKey]: false }));
+      callback && callback(); // You can navigate or trigger modals here
+    }, 1000); // Simulated delay
   };
 
   return (
@@ -349,25 +377,73 @@ const Settings = () => {
                   <label>
                     <FaKey /> Two-Factor Authentication
                   </label>
-                  <button>Setup</button>
+                  <button
+                    disabled={securityLoading.twoFactor}
+                    onClick={() => handleSecurityAction("twoFactor")}
+                  >
+                    {securityLoading.twoFactor ? (
+                      <>
+                        Setting up <ButtonLoader />
+                      </>
+                    ) : (
+                      "Setup"
+                    )}
+                  </button>
                 </div>
+
                 <div className="setting-item">
                   <label>
                     <FaLock /> Change Password
                   </label>
-                  <button>Change</button>
+                  <button
+                    disabled={securityLoading.changePassword}
+                    onClick={() => handleSecurityAction("changePassword")}
+                  >
+                    {securityLoading.changePassword ? (
+                      <>
+                        Changing <ButtonLoader />
+                      </>
+                    ) : (
+                      "Change"
+                    )}
+                  </button>
                 </div>
+
                 <div className="setting-item">
                   <label>
                     <FaShieldAlt /> Device Login History
                   </label>
-                  <button>View</button>
+                  <button
+                    disabled={securityLoading.viewHistory}
+                    onClick={() => handleSecurityAction("viewHistory")}
+                  >
+                    {securityLoading.viewHistory ? (
+                      <>
+                        Loading <ButtonLoader />
+                      </>
+                    ) : (
+                      "View"
+                    )}
+                  </button>
                 </div>
+
                 <div className="setting-item">
                   <label>
                     <FaShieldAlt /> Logout From All Devices
                   </label>
-                  <button className="logout">Logout</button>
+                  <button
+                    className="logout"
+                    disabled={securityLoading.logoutAll}
+                    onClick={() => handleSecurityAction("logoutAll")}
+                  >
+                    {securityLoading.logoutAll ? (
+                      <>
+                        Logging out <ButtonLoader />
+                      </>
+                    ) : (
+                      "Logout"
+                    )}
+                  </button>
                 </div>
               </div>
             </div>

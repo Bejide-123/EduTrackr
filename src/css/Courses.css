@@ -127,7 +127,9 @@
   transition: background 0.2s, color 0.2s, transform 0.15s;
   box-shadow: 0 2px 8px rgba(30,64,175,0.08);
 }
-
+#save-course{
+  width: 100% !important;
+}
 .course-form button:hover {
   background-color: #0049c6;
 }
@@ -377,23 +379,25 @@
   .dashboard {
     padding: 0.5rem 0.2rem;
   }
+
   .course-card {
     padding: 0.5rem;
     font-size: 0.95rem;
     width: 100%;
   }
-  .resume-btn{
-    display: none;
-  }
-  .course-progress-label {
+
+  .resume-btn {
+    order: 1;
     min-width: 50px;
     font-size: 0.85rem;
   }
+
   .course-form {
     padding: 0.5rem;
     font-size: 0.95rem;
   }
 }
+
 
 @media (max-width: 376px) {
   .dashboard {
@@ -432,13 +436,13 @@
   .add-course-icon {
     margin-right: 0;
   }
-  .resume-btn{
-    display: none !important;
+  .course-card {
+    cursor: pointer;
+  }
+    .resume-btn {
+    display: none;
   }
   .card-buttons {
-    margin-right: 10px;
-  }
-  .card-buttons button {
-    margin: 3px;
+    justify-content: flex-end;
   }
 }

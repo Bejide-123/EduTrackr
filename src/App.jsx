@@ -44,17 +44,17 @@ function App() {
       <Route
         path="/schedule"
         element={
-          <SignedIn>
+          
             <Schedule />
-          </SignedIn>
+          
         }
       />
       <Route
         path="/progress"
         element={
-          <SignedIn>
+          
             <Progress />
-          </SignedIn>
+          
         }
       />
       <Route

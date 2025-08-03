@@ -3,22 +3,23 @@ import "../css/Certificate.css";
 import { useParams } from "react-router-dom";
 import { PageLoader } from "../Componenets/Loaders";
 import { useEffect, useState } from "react";
+import { QRCodeSVG } from "qrcode.react";
 
 const Certificate = () => {
   const [initialLoading, setInitialLoading] = useState(true);
-  const { id } = useParams()
+  const { id } = useParams();
   const currentDate = new Date().toLocaleDateString();
 
   useEffect(() => {
-        const timer = setTimeout(() => {
-          setInitialLoading(false);
-        }, 3000);
-        return () => clearTimeout(timer);
-      }, []);
-    
-      if (initialLoading) {
-        return <PageLoader />;
-      }
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (initialLoading) {
+    return <PageLoader />;
+  }
 
   const handlePrint = () => {
     window.print();
@@ -53,6 +54,15 @@ const Certificate = () => {
                 <div className="line"></div>
                 <p>Instructor's Signature</p>
               </div>
+              <div style={{ textAlign: "center", marginTop: "1rem" }}>
+                <QRCodeSVG
+                  value={`https://edutrackr.verification/${id}`}
+                  size={100}
+                />
+                <p style={{ marginBottom: "0.5rem" }}>
+                  Scan to verify
+                </p>
+              </div>
               <div className="signature-block">
                 <img src={stamp} alt="EduTrackr Seal" className="seal-image" />
                 <div className="line"></div>
@@ -64,8 +74,8 @@ const Certificate = () => {
           <div className="cert-note">
             <p>
               This certificate is awarded in recognition of the successful
-              completion of the course and demonstrates the learner's
-              commitment to personal and professional development.
+              completion of the course and demonstrates the learner's commitment
+              to personal and professional development.
             </p>
             <button onClick={handlePrint} className="print-btn">
               Download / Print Certificate

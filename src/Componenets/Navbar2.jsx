@@ -115,6 +115,7 @@ const Navbar = () => {
           <li><Link to="/courses" onClick={() => setSidebarOpen(false)}>Courses</Link></li>
           <li><Link to="/schedule" onClick={() => setSidebarOpen(false)}>Schedule</Link></li>
           <li><Link to="/progress" onClick={() => setSidebarOpen(false)}>Progress</Link></li>
+          <li className='notification' onClick={() => {setSidebarOpen(false), setShowNotification(true)}}>Notification</li>
         </ul>
       </aside>
     </nav>
