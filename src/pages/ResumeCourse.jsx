@@ -6,12 +6,14 @@ import {
   FaCheckCircle,
   FaArrowCircleRight,
   FaLock,
+  FaList,
+  FaTimes,
 } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
 import { Player } from "@lottiefiles/react-lottie-player";
-import celebrateAnimation from "../assets/Fireworks.json"; // Place your Lottie file here
+import celebrateAnimation from "../assets/Fireworks.json"; 
 import { PageLoader } from "../Componenets/Loaders";
 import Certificate from "../Componenets/Certificate";
 
@@ -22,6 +24,10 @@ const Resume = () => {
   const [completedTopics, setCompletedTopics] = useState([]);
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [showCelebration, setShowCelebration] = useState(false);
+  
+  // New mobile states
+  const [showMobileDrawer, setShowMobileDrawer] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 640);
 
   useEffect(() => {
     const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
@@ -48,6 +54,19 @@ const Resume = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // New useEffect for handling window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 640);
+      if (window.innerWidth > 640) {
+        setShowMobileDrawer(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   if (initialLoading) return <PageLoader />;
   if (!course) return <div className="resume-page"><h2>Course not found.</h2></div>;
 
@@ -57,6 +76,20 @@ const Resume = () => {
 
   const handleTopicClick = (topic) => {
     setSelectedTopic(topic);
+  };
+
+  // New mobile-specific handlers
+  const handleMobileTopicClick = (topic) => {
+    setSelectedTopic(topic);
+    setShowMobileDrawer(false);
+  };
+
+  const toggleMobileDrawer = () => {
+    setShowMobileDrawer(!showMobileDrawer);
+  };
+
+  const closeMobileDrawer = () => {
+    setShowMobileDrawer(false);
   };
 
   const handleMarkAsCompleted = () => {
@@ -85,6 +118,7 @@ const Resume = () => {
       <Navbar />
       <div className="resume-page">
         <div className="resume-page-container">
+          {/* Desktop Sidebar */}
           <aside>
             <div className="course-details">
               <div className="course-name"><h2>{course.name}</h2></div>
@@ -148,6 +182,31 @@ const Resume = () => {
           </aside>
 
           <div className="main-content">
+            {/* Mobile Progress Header */}
+            {isMobile && (
+              <div className="mobile-progress-header">
+                <h3>{course.name}</h3>
+                <p className="mobile-progress-text">{progress}% completed</p>
+                <div className="mobile-progress-bar">
+                  <div className="mobile-progress-fill" style={{ width: `${progress}%` }}></div>
+                </div>
+              </div>
+            )}
+
+            {/* Mobile Current Topic Display */}
+            {isMobile && selectedTopic && selectedTopic.id !== "certificate" && (
+              <div className="current-topic-display">
+                <div className="current-topic-title">
+                  <FaBookOpen />
+                  Current: {selectedTopic.title}
+                </div>
+                <p className="current-topic-progress">
+                  Topic {topics.findIndex(t => t.id === selectedTopic.id) + 1} of {topics.length}
+                </p>
+              </div>
+            )}
+
+            {/* Main Content */}
             {selectedTopic ? (
               selectedTopic.id === "certificate" ? (
                 <Certificate courseName={course.name} />
@@ -169,7 +228,7 @@ const Resume = () => {
                     onClick={handleMarkAsCompleted}
                     disabled={isCompleted(selectedTopic.id)}
                   >
-                    {isCompleted(selectedTopic.id) ? "Already Completed" : "Mark as Completed"}
+                    {isCompleted(selectedTopic.id) ? "✅ Completed" : "Mark as Completed"}
                   </button>
                 </>
               )
@@ -177,13 +236,90 @@ const Resume = () => {
               <div className="all-done-message">
                 {showCelebration && (
                   <div className="celebration-lottie">
-                    <Player autoplay loop={false} src={celebrateAnimation} style={{ height: "250px", width: "250px" }} />
+                    <Player 
+                      autoplay 
+                      loop={false} 
+                      src={celebrateAnimation} 
+                      style={{ height: "250px", width: "250px" }} 
+                    />
                   </div>
                 )}
+                <h2>🎉 Congratulations!</h2>
+                <p>You've completed all topics in this course!</p>
               </div>
             )}
           </div>
         </div>
+
+        {/* Mobile Topics Toggle Button */}
+        {isMobile && (
+          <button className="mobile-topics-toggle" onClick={toggleMobileDrawer}>
+            <FaList />
+          </button>
+        )}
+
+        {/* Mobile Overlay */}
+        {isMobile && showMobileDrawer && (
+          <div className="mobile-overlay show" onClick={closeMobileDrawer}></div>
+        )}
+
+        {/* Mobile Drawer */}
+        {isMobile && (
+          <div className={`mobile-drawer ${showMobileDrawer ? 'open' : ''}`}>
+            <div className="mobile-drawer-header">
+              <h4 className="mobile-drawer-title">Course Topics</h4>
+            </div>
+            <div className="mobile-drawer-content">
+              <div className="topic-list">
+                {topics.map((topic) => {
+                  const completed = isCompleted(topic.id);
+                  const current = selectedTopic?.id === topic.id;
+                  let icon;
+                  let className = "course-topics";
+
+                  if (completed) {
+                    icon = <FaCheckCircle color="green" />;
+                    className += " completed";
+                  } else if (current) {
+                    icon = <FaArrowCircleRight color="orange" />;
+                    className += " current";
+                  } else {
+                    icon = <FaLock color="gray" />;
+                    className += " locked";
+                  }
+
+                  return (
+                    <div
+                      className={className}
+                      key={topic.id}
+                      onClick={() => handleMobileTopicClick(topic)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <span className="topic-icon">{icon}</span>
+                      <span className="topic-title">{topic.title}</span>
+                    </div>
+                  );
+                })}
+
+                {progress === 100 && (
+                  <div
+                    className="course-topics certificate-entry"
+                    onClick={() => {
+                      handleViewCertificate();
+                      setShowMobileDrawer(false);
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <span className="topic-icon">
+                      <FaCheckCircle color="gold" />
+                    </span>
+                    <span className="topic-title">🎓 View Certificate</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

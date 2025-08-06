@@ -10,10 +10,22 @@ const Certificate = () => {
   const { id } = useParams();
   const currentDate = new Date().toLocaleDateString();
 
+  // Get user name from localStorage
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+  const userName = loginInfo?.name || "Student";
+
+  // Get course name from localStorage using course ID and user email
+  let courseName = "Course";
+  if (id && loginInfo?.email) {
+    const courses = JSON.parse(localStorage.getItem(`courses_${loginInfo.email}`)) || [];
+    const course = courses.find((c) => c.id === id);
+    courseName = course?.name || "Course";
+  }
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setInitialLoading(false);
-    }, 3000);
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -42,9 +54,9 @@ const Certificate = () => {
 
           <h2 className="cert-heading">Certificate of Completion</h2>
           <p className="cert-sub">This is to proudly certify that</p>
-          <h3 className="cert-user">Bejide Mofiyinfoluwa Israel</h3>
+          <h3 className="cert-user">{userName}</h3>
           <p className="cert-sub">has successfully completed the course</p>
-          <h4 className="cert-course">Mathematics for Beginners</h4>
+          <h4 className="cert-course">{courseName}</h4>
 
           <div className="cert-footer">
             <p className="cert-date">Awarded on: {currentDate}</p>
