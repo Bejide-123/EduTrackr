@@ -4,12 +4,24 @@ import { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import React, { useEffect } from "react";
+import { getQuotes } from "../APIs/GetQuotes";
 
 const Dashboard = () => {
   const [date, setDate] = useState(new Date());
   const [courseCount, setCourseCount] = useState(0);
   const [userFirstName, setUserFirstName] = useState("");
   const [assignmentCount, setAssignmentCount] = useState(0);
+  const [quote, setQuotes] = useState("");
+
+  useEffect(() => {
+    getQuotes(setQuotes);
+
+    const interval = setInterval(() => {
+      getQuotes(setQuotes);
+    }, 10000); // every 10 seconds
+
+    return () => clearInterval(interval); // cleanup
+  }, []);
 
   const isToday = (dateObj) => {
     const today = new Date();
@@ -29,7 +41,8 @@ const Dashboard = () => {
         savedCourses =
           JSON.parse(localStorage.getItem(`courses_${loginInfo.email}`)) || [];
         savedAssignments =
-          JSON.parse(localStorage.getItem(`assignments_${loginInfo.email}`)) || [];
+          JSON.parse(localStorage.getItem(`assignments_${loginInfo.email}`)) ||
+          [];
       }
       setCourseCount(savedCourses.length);
       setAssignmentCount(savedAssignments.length);
@@ -55,7 +68,7 @@ const Dashboard = () => {
     <div className="dashboard-page">
       <div className="left-widget">
         <h4>Quick Tip 💡</h4>
-        <p>Break your study sessions into 25-minute focus blocks.</p>
+        <p>{quote}</p>
       </div>
 
       <div className="dashboard-container">
