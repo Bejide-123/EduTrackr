@@ -324,7 +324,7 @@ body {
     order: 1;
   }
   .dashboard-item{
-    width: 80% !important;
+    width: 70% !important;
   }
 }
 @media (max-width: 450px) {
@@ -348,7 +348,9 @@ body {
     flex-direction: column;
     align-items: center;
   }
-
+  .dashboard-item{
+    width: 70% !important;
+  }
   .dashboard-container {
     width: 95%;
     order: 1;

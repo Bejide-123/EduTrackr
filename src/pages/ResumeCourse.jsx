@@ -13,18 +13,19 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
 import { Player } from "@lottiefiles/react-lottie-player";
-import celebrateAnimation from "../assets/Fireworks.json"; 
-import { PageLoader } from "../Componenets/Loaders";
+import celebrateAnimation from "../assets/Fireworks.json";
+import { PageLoader, SectionLoader } from "../Componenets/Loaders";
 import Certificate from "../Componenets/Certificate";
 
 const Resume = () => {
   const [initialLoading, setInitialLoading] = useState(true);
+  const [sectionLoading, setSectionLoading] = useState(true);
   const { id } = useParams();
   const [course, setCourse] = useState(null);
   const [completedTopics, setCompletedTopics] = useState([]);
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [showCelebration, setShowCelebration] = useState(false);
-  
+
   // New mobile states
   const [showMobileDrawer, setShowMobileDrawer] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 640);
@@ -54,6 +55,14 @@ const Resume = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (selectedTopic) {
+      setSectionLoading(true);
+      const timer = setTimeout(() => setSectionLoading(false), 2000); // 1.5s loader
+      return () => clearTimeout(timer);
+    }
+  }, [selectedTopic]);
+
   // New useEffect for handling window resize
   useEffect(() => {
     const handleResize = () => {
@@ -63,12 +72,17 @@ const Resume = () => {
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   if (initialLoading) return <PageLoader />;
-  if (!course) return <div className="resume-page"><h2>Course not found.</h2></div>;
+  if (!course)
+    return (
+      <div className="resume-page">
+        <h2>Course not found.</h2>
+      </div>
+    );
 
   const topics = course.topics || [];
   const isCompleted = (topicId) => completedTopics.includes(topicId);
@@ -97,7 +111,10 @@ const Resume = () => {
 
     const updated = [...completedTopics, selectedTopic.id];
     setCompletedTopics(updated);
-    localStorage.setItem(`completedTopics_${course.code}`, JSON.stringify(updated));
+    localStorage.setItem(
+      `completedTopics_${course.code}`,
+      JSON.stringify(updated)
+    );
 
     const next = topics.find((t) => !updated.includes(t.id));
     setSelectedTopic(next || null);
@@ -121,16 +138,26 @@ const Resume = () => {
           {/* Desktop Sidebar */}
           <aside>
             <div className="course-details">
-              <div className="course-name"><h2>{course.name}</h2></div>
+              <div className="course-name">
+                <h2>{course.name}</h2>
+              </div>
               <p>{progress}% completed</p>
               <div className="course-progress-bar">
-                <div className="course-progress-fill" style={{ width: `${progress}%` }}></div>
+                <div
+                  className="course-progress-fill"
+                  style={{ width: `${progress}%` }}
+                ></div>
               </div>
 
               <div className="topic-to-resume">
-                <div className="cp"><FaBookOpen /></div>
+                <div className="cp">
+                  <FaBookOpen />
+                </div>
                 <div className="topic-name">
-                  <p>Resume from: {selectedTopic?.title || "All topics completed"}</p>
+                  <p>
+                    Resume from:{" "}
+                    {selectedTopic?.title || "All topics completed"}
+                  </p>
                 </div>
               </div>
 
@@ -188,27 +215,36 @@ const Resume = () => {
                 <h3>{course.name}</h3>
                 <p className="mobile-progress-text">{progress}% completed</p>
                 <div className="mobile-progress-bar">
-                  <div className="mobile-progress-fill" style={{ width: `${progress}%` }}></div>
+                  <div
+                    className="mobile-progress-fill"
+                    style={{ width: `${progress}%` }}
+                  ></div>
                 </div>
               </div>
             )}
 
             {/* Mobile Current Topic Display */}
-            {isMobile && selectedTopic && selectedTopic.id !== "certificate" && (
-              <div className="current-topic-display">
-                <div className="current-topic-title">
-                  <FaBookOpen />
-                  Current: {selectedTopic.title}
+            {isMobile &&
+              selectedTopic &&
+              selectedTopic.id !== "certificate" && (
+                <div className="current-topic-display">
+                  <div className="current-topic-title">
+                    <FaBookOpen />
+                    Current: {selectedTopic.title}
+                  </div>
+                  <p className="current-topic-progress">
+                    Topic{" "}
+                    {topics.findIndex((t) => t.id === selectedTopic.id) + 1} of{" "}
+                    {topics.length}
+                  </p>
                 </div>
-                <p className="current-topic-progress">
-                  Topic {topics.findIndex(t => t.id === selectedTopic.id) + 1} of {topics.length}
-                </p>
-              </div>
-            )}
+              )}
 
             {/* Main Content */}
             {selectedTopic ? (
-              selectedTopic.id === "certificate" ? (
+              sectionLoading ? (
+                <PageLoader />
+              ) : selectedTopic.id === "certificate" ? (
                 <Certificate courseName={course.name} />
               ) : (
                 <>
@@ -220,7 +256,10 @@ const Resume = () => {
                   )}
                   {selectedTopic.fileData && (
                     <div className="pdf-container">
-                      <iframe src={selectedTopic.fileData} title="Topic Material"></iframe>
+                      <iframe
+                        src={selectedTopic.fileData}
+                        title="Topic Material"
+                      ></iframe>
                     </div>
                   )}
                   <button
@@ -228,7 +267,9 @@ const Resume = () => {
                     onClick={handleMarkAsCompleted}
                     disabled={isCompleted(selectedTopic.id)}
                   >
-                    {isCompleted(selectedTopic.id) ? "✅ Completed" : "Mark as Completed"}
+                    {isCompleted(selectedTopic.id)
+                      ? "✅ Completed"
+                      : "Mark as Completed"}
                   </button>
                 </>
               )
@@ -236,11 +277,11 @@ const Resume = () => {
               <div className="all-done-message">
                 {showCelebration && (
                   <div className="celebration-lottie">
-                    <Player 
-                      autoplay 
-                      loop={false} 
-                      src={celebrateAnimation} 
-                      style={{ height: "250px", width: "250px" }} 
+                    <Player
+                      autoplay
+                      loop={false}
+                      src={celebrateAnimation}
+                      style={{ height: "250px", width: "250px" }}
                     />
                   </div>
                 )}
@@ -260,12 +301,15 @@ const Resume = () => {
 
         {/* Mobile Overlay */}
         {isMobile && showMobileDrawer && (
-          <div className="mobile-overlay show" onClick={closeMobileDrawer}></div>
+          <div
+            className="mobile-overlay show"
+            onClick={closeMobileDrawer}
+          ></div>
         )}
 
         {/* Mobile Drawer */}
         {isMobile && (
-          <div className={`mobile-drawer ${showMobileDrawer ? 'open' : ''}`}>
+          <div className={`mobile-drawer ${showMobileDrawer ? "open" : ""}`}>
             <div className="mobile-drawer-header">
               <h4 className="mobile-drawer-title">Course Topics</h4>
             </div>

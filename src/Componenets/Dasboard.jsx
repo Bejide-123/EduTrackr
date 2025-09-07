@@ -18,7 +18,7 @@ const Dashboard = () => {
 
     const interval = setInterval(() => {
       getQuotes(setQuotes);
-    }, 10000); // every 10 seconds
+    }, 100000); 
 
     return () => clearInterval(interval); // cleanup
   }, []);

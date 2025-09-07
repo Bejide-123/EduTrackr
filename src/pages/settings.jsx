@@ -21,8 +21,12 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { MdSettings } from "react-icons/md";
 import { PageLoader } from "../Componenets/Loaders";
 import { ButtonLoader } from "../Componenets/Loaders";
+import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+  // const userEmail = loginInfo?.email;
+  // const [userFirstName, setUsersFirstName] = useState("");
   const [activeTab, setActiveTab] = useState("general"); // default
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -32,6 +36,7 @@ const Settings = () => {
     viewHistory: false,
     logoutAll: false,
   });
+  const navigate = useNavigate()
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -52,7 +57,9 @@ const Settings = () => {
   //   if (loginInfo && loginInfo.name) {
   //     setUserFirstName(loginInfo.name);
   //   }
-
+  // if (loginInfo && userEmail) {
+  //   setUsersFirstName = localStorage.getItem(loginInfo.name.split(" ")[0]);
+  // }
   const handleScrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -148,12 +155,16 @@ const Settings = () => {
 
             <div className="edutrackr-sidebar-profile">
               <img
-                src="https://ui-avatars.com/api/?name=User+Name&background=4F9CF9&color=fff"
+                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  loginInfo?.name || "User"
+                )}&background=4F9CF9&color=fff`}
                 alt="User Avatar"
                 className="edutrackr-avatar"
               />
               <div className="edutrackr-user-info">
-                <p className="edutrackr-user-name">User name</p>
+                <p className="edutrackr-user-name">
+                  {loginInfo?.name || "Guest User"}
+                </p>
                 <p className="edutrackr-user-role">Student</p>
               </div>
             </div>
@@ -397,7 +408,10 @@ const Settings = () => {
                   </label>
                   <button
                     disabled={securityLoading.changePassword}
-                    onClick={() => handleSecurityAction("changePassword")}
+                    onClick={() => {
+                      handleSecurityAction("changePassword"),
+                      navigate("/change-password")
+                    }}
                   >
                     {securityLoading.changePassword ? (
                       <>

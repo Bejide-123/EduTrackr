@@ -5,7 +5,6 @@ import '../css/forgot-password.css'
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [securityQuestion, setSecurityQuestion] = useState("");
   const [answer, setAnswer] = useState("");
